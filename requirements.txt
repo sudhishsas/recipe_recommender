@@ -1,0 +1,20 @@
+# ----------------------
+# Flask
+# ----------------------
+flask
+Flask-WTF
+Flask-SQLAlchemy
+Flask-Migrate
+Flask-Login
+psycopg2
+python-dotenv
+numpy
+nltk
+pandas
+unidecode
+Word2Vec
+
+# ----------------------
+# Production Server
+# ----------------------
+gunicorn
