@@ -114,3 +114,13 @@ test =[]
 #print("words list",wors_list)
 
 
+#import re
+#steps = data.RecipeInstructions.values
+#for i in steps:
+#    i= i.replace("[", "")
+#    i=i.replace("]","")
+#    i=i.replace(".","")
+    #i=i.replace(",","")
+#    i = i.split(",")
+    #i= re.findall('[A-Z][^A-Z]*', i)
+#    print((i))

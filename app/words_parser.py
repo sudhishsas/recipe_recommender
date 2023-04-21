@@ -19,7 +19,7 @@ import config
 # lemmatizer = WordNetLemmatizer()
 # measures = [lemmatizer.lemmatize(m) for m in measures]
 # words_to_remove = [lemmatizer.lemmatize(m) for m in words_to_remove]
-data = pd.read_csv(r'C:\xampp\htdocs\3161Database files\recipe_recommender\app\csvfiles\updated_Categories.csv')
+#data = pd.read_csv(r'C:\xampp\htdocs\3161Database files\recipe_recommender\app\csvfiles\updated_Categories.csv')
 
 def ingredient_parser(ingreds):
     
