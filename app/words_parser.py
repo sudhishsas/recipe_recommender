@@ -64,6 +64,7 @@ def ingredient_parser(ingreds):
         ingredients = ingreds
         
     else:
+        #turns a numpy string to a list 
         ingredients = ast.literal_eval(ingreds)
     # We first get rid of all the punctuation. We make use of str.maketrans. It takes three input
     # arguments 'x', 'y', 'z'. 'x' and 'y' must be equal-length strings and characters in 'x'
@@ -71,6 +72,7 @@ def ingredient_parser(ingreds):
     #  in the string is mapped to None.
     
     translator = str.maketrans("", "", string.punctuation)
+    #turns the word to its singular form.
     lemmatizer = WordNetLemmatizer()
     ingred_list = []
 
@@ -305,7 +307,7 @@ def addparsedddoctocsv(rec, input=0):
         
         rows = []
         print("started adding the docs to the file")
-        for i in len(rec):
+        for i in range(len(rec)):
             rows.clear()
             recipeid = df_recipes["RecipeId"][i]
             name = df_recipes["Name"][i]

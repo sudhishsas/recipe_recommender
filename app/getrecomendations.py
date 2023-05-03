@@ -8,14 +8,23 @@ from words_parser import ingredient_parser
 from sklearn.feature_extraction.text import TfidfVectorizer
 from collections import defaultdict
 from gensim.models import Word2Vec
+from getdocsforcategory import getsortedcategorycsv
 
 
-def get_recommendations(N, scores):
+def get_recommendations(N, scores,categories):
     """
     Top-N recomendations order by score
     """
     # load in recipe dataset
-    df_recipes = pd.read_csv(r'C:\xampp\htdocs\3161Database files\recipe_recommender\app\csvfiles\parseddocuments.csv', encoding= 'unicode_escape')
+    if categories == []:
+        # load in data
+        print("came to parsed ingredients")
+        df_recipes  = pd.read_csv(r"C:\xampp\htdocs\3161Database files\recipe_recommender\app\csvfiles\parseddocuments.csv", encoding= 'unicode_escape')
+    else:
+        print("came to category list")
+        df_recipes = pd.read_csv(r"C:\xampp\htdocs\3161Database files\recipe_recommender\app\csvfiles\specific_category.csv", encoding= 'unicode_escape')
+    
+    #df_recipes = pd.read_csv(r'C:\xampp\htdocs\3161Database files\recipe_recommender\app\csvfiles\parseddocuments.csv', encoding= 'unicode_escape')
     # order the scores with and filter to get the highest N scores
     top = sorted(range(len(scores)), key=lambda i: scores[i], reverse=True)[:N]
     # create dataframe to load in recommendations
@@ -116,6 +125,7 @@ def get_and_sort_corpus(data):
     return sorted
 
 def get_recs(ingredients, N, categories):
+    print(ingredients)
     # loading in the ingredients word2vec model 
     model = Word2Vec.load("app\models\model_cbow_ingredients.bin")
     model.init_sims(replace=True)
@@ -124,10 +134,14 @@ def get_recs(ingredients, N, categories):
         print("Successfully loaded model :)")
     
     #check if there are categories that the corpus was sorted for
-    if categories:
+    if categories == []:
         # load in data
+        print("came to parsed ingredients")
         data  = pd.read_csv(r"app\csvfiles\parsed_ingredients.csv", encoding= 'unicode_escape')
     else:
+        print("came to category list")
+        dataforsort = pd.read_csv(r'C:\xampp\htdocs\3161Database files\recipe_recommender\app\csvfiles\parseddocuments.csv')
+        getsortedcategorycsv(dataforsort["Keywords_parsed"], categories)
         data = pd.read_csv(r"app\csvfiles\specific_category.csv", encoding= 'unicode_escape')
     
     # parse ingredients
@@ -151,7 +165,7 @@ def get_recs(ingredients, N, categories):
     input = input.split(",")
     # parse ingredient list
     input = ingredient_parser(input)
-
+    print("this is input", input)
     # get embeddings for ingredient doc
     input_embedding = tfidf_vec_tr.transform([input])[0].reshape(1, -1)
    
@@ -160,7 +174,7 @@ def get_recs(ingredients, N, categories):
     scores = list(cos_sim)
     
     # Filter top N recommendations
-    recommendations = get_recommendations(N, scores)
+    recommendations = get_recommendations(N, scores,categories)
     
     return recommendations   
 
@@ -169,8 +183,8 @@ def get_recs(ingredients, N, categories):
 #for i in dit:
 #    print(type(ast.literal_eval(i)))
 
-#"peas, rice , oat, flour, yam , banana, cucumber, mango , ginger, pork"
-input = "paprika, bell pepper, chicken, yogurt"
-categories = []
+#"peas, rice , oat, flour, yam, banana, cucumber, mango , ginger, pork"
+input = "kiwi,banana,grapes,raspberries,black berries,milk,peanutbutter"
+categories = ['sweet','beverage']
 rec = get_recs(input, 10, categories)
 print(rec)

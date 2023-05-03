@@ -48,21 +48,18 @@ class User_Profile(db.Model):
     __tablename__ = 'members'
 
     id = db.Column(db.Integer, primary_key=True)
-    f_name = db.Column(db.String(100),nullable=False)
-    l_name = db.Column(db.String(100),nullable=False)
-    email = db.Column(db.String(120),nullable=False)
     ingredients = db.Column(db.TEXT,nullable=True)
     alergies = db.Column(db.TEXT,nullable=True)
+    fav_categories = db.Column(db.TEXT,nullable=True)
     date_added = db.Column(db.DateTime, default = datetime.utcnow)
 
 
-    def __init__(self, position ,f_name,l_name, email,ingredients, address):
-        self.position = position
-        self.l_name = l_name
-        self.f_name = f_name
-        self.email = email
+    def __init__(self, id , ingredients, alergies, fav_categories, date_added):
+        self.id = id
         self.ingredients = ingredients
-        self.address = address
+        self.alergies = alergies
+        self.fav_categories = fav_categories
+        self.date_added = date_added
 
 
 
