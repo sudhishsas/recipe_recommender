@@ -2,6 +2,7 @@ from flask import Flask
 from flask_login import LoginManager
 from flask_sqlalchemy import SQLAlchemy
 from .config import Config
+from os import path
 from flask_migrate import Migrate
 
 
