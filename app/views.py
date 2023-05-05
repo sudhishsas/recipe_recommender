@@ -8,13 +8,13 @@ This file creates your application.
 from app import app, db, login_manager
 from flask import render_template, request, redirect, url_for, flash
 from flask_login import login_user, logout_user, current_user, login_required
-from app.forms import LoginForm
+from app.forms import LoginForm, GetrecomForm
 from app.models import User_Profile, UserLogin
 from werkzeug.security import check_password_hash
 
 
 ###
-# Routing for your application.
+# Routing for the application.
 ###
 
 @app.route('/')
@@ -41,7 +41,7 @@ def login():
             username = form.username.data
             password = form.password.data
 
-            user = UserProfile.query.filter_by(username=username).first()
+            user = UserLogin.query.filter_by(username=username).first()
 
             if user is not None and check_password_hash(user.password, password):
                 login_user(user)
@@ -50,6 +50,14 @@ def login():
             else: 
                 flash('Username or Password is incorrect.', 'danger')
     return render_template("login.html", form=form)
+
+@app.route("/getrecommendation", methods =["GET","POST"])
+def getrecommendation():
+    form = GetrecomForm()
+    if request.method == "POST":
+        flash('showed something', 'success')
+    return render_template("getrecom.html", form = form)
+
 
 @app.route("/secure-page")
 @login_required
@@ -67,7 +75,7 @@ def logout():
 # the user ID stored in the session
 @login_manager.user_loader
 def load_user(id):
-    return UserProfile.query.get(int(id))
+    return UserLogin.query.get(int(id))
 
 ###
 # The functions below should be applicable to all Flask apps.
