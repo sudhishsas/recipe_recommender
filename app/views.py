@@ -8,13 +8,17 @@ This file creates your application.
 from app import app, db, login_manager
 from flask import render_template, request, redirect, url_for, flash
 from flask_login import login_user, logout_user, current_user, login_required
+<<<<<<< HEAD
 from app.forms import LoginForm, newuser
+=======
+from app.forms import LoginForm, newuser,  GetrecomForm
+>>>>>>> a8b5891809096e0e2ec3004f4d7aa617841ce503
 from app.models import User_Profile, UserLogin
-from werkzeug.security import check_password_hash,generate_password_hash
+from werkzeug.security import check_password_hash, generate_password_hash
 from datetime import date, datetime
 
 ###
-# Routing for your application.
+# Routing for the application.
 ###
 
 @app.route('/')
@@ -51,20 +55,7 @@ def login():
     flash_errors(form)          
     return render_template("login.html", form=form)
 
-@app.route('/profile', methods=['GET', 'POST'])
-@login_required
-def profile():
-    form = UserProfile()
-    if request.method == "POST":
-        if form.validate_on_submit():
-            ingredients = form.ingredients.data
-            allergies = form.allergies.data
-            fav_categories = form.fav_categories.data
-            today_date = date.today()
-            
-            print(ingredients, allergies, fav_categories)         
-             
-    return render_template("profile.html", form=form)
+
 
 @app.route('/sign-up', methods=['GET', 'POST'])
 def sign_up():
@@ -111,6 +102,14 @@ def sign_up():
 def about():
     """Render the website's about page."""
     return render_template('about.html')
+
+
+@app.route("/getrecommendation", methods =["GET","POST"])
+def getrecommendation():
+    form = GetrecomForm()
+    if request.method == "POST":
+        flash('showed something', 'success')
+    return render_template("getrecom.html", form = form)
 
 
 @app.route("/secure-page")

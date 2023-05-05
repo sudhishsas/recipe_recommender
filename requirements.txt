@@ -1,9 +1,10 @@
 # ----------------------
 # Flask
 # ----------------------
-flask
+flask==2.2.2
 Flask-WTF
 Flask-SQLAlchemy
+flask-sqlalchemy==3.0.2
 Flask-Migrate
 Flask-Login
 psycopg2

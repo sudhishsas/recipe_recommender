@@ -1,3 +1,12 @@
 body {
     padding-top: 5rem;
 }
+
+.categorielist{
+    -moz-column-count: 10;
+    -moz-column-gap: 40px;
+    -webkit-column-count: 10;
+    -webkit-column-gap: 20px;
+    column-count: 10;
+    column-gap: 20px;
+}

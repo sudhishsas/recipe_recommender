@@ -27,6 +27,7 @@ def get_recommendations(N, scores,categories):
     #df_recipes = pd.read_csv(r'C:\xampp\htdocs\3161Database files\recipe_recommender\app\csvfiles\parseddocuments.csv', encoding= 'unicode_escape')
     # order the scores with and filter to get the highest N scores
     top = sorted(range(len(scores)), key=lambda i: scores[i], reverse=True)[:N]
+    print("thi is top",top)
     # create dataframe to load in recommendations
     recommendation = pd.DataFrame(columns=["recipe_name", "ingredients", "category", "recipe_instructions","score"])
     count = 0
@@ -101,7 +102,9 @@ class TfidfEmbeddingVectorizer(object):
             # )
             return np.zeros(self.vector_size)
         else:
+            print("before",mean)
             mean = np.array(mean).mean(axis=0)
+            print("mean after",mean)
             return mean
 
     def word_average_list(self, docs):
@@ -158,7 +161,7 @@ def get_recs(ingredients, N, categories):
     doc_vec = tfidf_vec_tr.transform(corpus)
     doc_vec = [doc.reshape(1, -1) for doc in doc_vec]
     assert len(doc_vec) == len(corpus)
-
+    
     # create embessing for input text
     input = ingredients
     # create tokens with elements
@@ -168,7 +171,10 @@ def get_recs(ingredients, N, categories):
     print("this is input", input)
     # get embeddings for ingredient doc
     input_embedding = tfidf_vec_tr.transform([input])[0].reshape(1, -1)
-   
+    
+    #print("This is doc_vec", doc_vec)
+    print("this is input embeding", input_embedding)
+
     # get cosine similarity between input embedding and all the document embeddings
     cos_sim = map(lambda x: cosine_similarity(input_embedding, x)[0][0], doc_vec)
     scores = list(cos_sim)

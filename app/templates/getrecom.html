@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block main %}
+  <div class="login-form center-block">
+    <h2>Please Log in</h2>
+    <form action="{{ url_for('getrecommendation') }}" method="post">
+      {{ form.csrf_token }}
+      {% include 'flash_messages.html' %}
+
+
+      <div class="categorielist">
+        {{ form.categories.label(class_="form-label") }}
+        {{ form.categories(class_="list-group") }}
+      </div>
+
+      
+      <button type="submit" name="submit" class="btn btn-primary btn-block">Get Recommendation</button>
+    </form>
+  </div>
+{% endblock %}

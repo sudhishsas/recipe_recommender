@@ -59,11 +59,33 @@ savory = ['Chicken Breast', 'Soy/Tofu', 'Vegetable', 'Pie', 'Chicken', 'Southwes
             'Wild Game', 'Pheasant', 'Japanese', 'Canadian', 'Salad Dressings', 'Spring', 'Vegan', 'Grains', 'Collard Greens', 'Tilapia', 'Penne', 'Refrigerator', 'Potluck', 'Spicy', 'Moroccan', 'Pressure Cooker', 'Papaya', 'Kid Friendly', 'Korean', 'Whole Turkey', 'Pasta Shells', 'Plums', 'Danish', 'Lebanese', 'Creole', 'Medium Grain Rice', 'Spinach', 'Squid', 'Homeopathy/Remedies', 'Thanksgiving', 'Moose', 'Native American', 'African', 'High Fiber', 'Kosher', 'Norwegian', 'Household Cleaner', 'Ethiopian', 'Polish', 'Belgian', 'Rabbit', 'Swedish', 'Goose', 'Austrian', 'Australian', 'Swiss', 'Pennsylvania Dutch', 'Elk', 'Bear', 'Mahi Mahi', 'Duck Breasts', 'Scottish', 'Quail', 'Tempeh', 'Cuban', 'Turkey Breasts', 
             'Cantonese', 'Peanut Butter', 'Hawaiian', 'Bath/Beauty', 'Szechuan', 'Portuguese', 'Summer Dip', 'Costa Rican', 'Duck', 'Dutch', 'Filipino', 'Welsh', 'Camping', 'Russian', 'St. Patricks Day', 'Pot Pie', 'Polynesian', 'Cherries', 'Egyptian', 'Chard', 'Lime', 'Lemon', 'Kiwifruit', 'Mango', 'No Shell Fish', 'Whitefish', 'Brunch', 'Malaysian', 'Toddler Friendly', 'Octopus', 'Nigerian', 'Mixer', 'Venezuelan', 'Bread Machine', 'South African', 'Finnish', 'No Cook', 'South American', 'Nepalese', 'Palestinian', 'Egg Free', 'Sweet', 'Czech', 'Icelandic', 'Beginner Cook', 'Hunan', 'Halloween', 'Avocado', 'Iraqi', '< 4 Hours', 'Pakistani', 'Chocolate Chip Cookies', 'Canning', 'Stove Top', 'Puerto Rican', 'Ecuadorean', 'Hanukkah', 'Chilean', 'Breakfast Eggs', 'Cambodian', 'Honduran', 'Peruvian', 'Nuts', 'Peanut Butter Pie', 'Deep Fried', 'Ham And Bean Soup', 'Bread Pudding', 'Margarita', 'Bean Soup', 'Turkey Gravy', 'Spaghetti Sauce', 'Freezer', 'Lemon Cake', 'Black Bean Soup', 'Somalian', 'Main Dish Casseroles', 'Pot Roast', 'Potato Soup', 'Broccoli Soup', 'Apple Pie', 'Oatmeal', 'Soups Crock Pot', 'Roast Beef Crock Pot', 'Chicken Crock Pot', 'Breakfast Casseroles', 'Grapes', 'Macaroni And Cheese', 'Mashed Potatoes', 'Desserts Fruit', 'Birthday', 'Pumpkin', 'Ice Cream', 'Artichoke', 'Indian', 'Baking', 'Beef Liver', 'Memorial Day', 'Sudanese', 'Coconut Cream Pie', 'Easy', 'Steam', 'Dehydrator', 'Mongolian', 'Small Appliance' ]
 
+category_words = ['savory', 'easy', '< 60 min', 'meat', 'dessert', '< 4 hour', 'vegetable', '< 30 min', 'healthy', 'low cholesterol', 'inexpensive', 'beginner cook', 'low protein', 'fruit', 'european', 'kid friendly', 'weeknight', 'lunch/snacks', 'for large group', 'one dish meal', '< 15 min', 'brunch', 'bread', 'breakfast', 'asian', 'sweet', 'very low carbs',
+                'chicken breast', 'potluck', 'vegan', 'christmas', 'summer', 'spicy', 'winter', 'high protein', 'mexican', 'quick bread', 'from scratch', 'egg free', 'toddler friendly', 'sauce', 'thanksgiving', 'canadian', 'kosher', 'bar cookie', 'pie', 'lactose free', 'drop cooky', 'beverage', 'stew', 'southwestern u.s.', 'indian', 'citrus', 'yeast bread', 'spring',
+                'australian', 'african', 'chinese', 'candy', 'greek', 'frozen dessert', 'savory pie', 'broil/grill', 'stir fry', 'southwest asia middle east', 'curry', 'tex mex', 'thai', 'german', 'camping', 'caribbean', 'cajun', 'no cook', 'scandinavian', 'deep fried', 'south american', 'canning', 'roast', 'spanish', 'creole', 'japanese', 'moroccan', 'salad dressing', 
+                'baking', 'wild game', 'scottish', 'st. patrick day', 'halloween', 'hanukkah', 'new zealand', 'stock', 'birthday', 'smoothy', 'punch beverage', 'russian', 'hawaiian', 'polish', 'swedish', 'vietnamese', 'portuguese', 'hungarian', 'swiss', 'deer', 'korean', 'pumpkin', 'south african', 'filipino', 'pakistani', 'lebanese', 'turkish', 'cuban', 'ramadan', 'chutney', 
+                'danish', 'dutch', 'indonesian', 'jelly', 'no shell fish', 'pennsylvania dutch', 'brazilian', 'norwegian', 'native american', 'austrian', 'shake', 'cantonese', 'belgian', 'dairy free food', 'egyptian', 'manicotti', 'czech', 'ice cream', 'polynesian', 'malaysian', 'finnish', 'southwest asia (middle east)', 'sourdough bread', 'peruvian', 'high fiber', 'puerto rican',
+                'colombian', 'iraqi', 'labor day', 'bath/beauty', 'ethiopian', 'memorial day', 'tempeh', 'palestinian', 'chilean', 'nepalese', 'dehydrator', 'cambodian', 'homeopathy/remedies', 'icelandic', 'venezuelan', 'ecuadorean', 'hunan', 'college food', 'nigerian', 'costa rican', 'chinese new year', 
+                'guatemalan', 'mongolian', 'georgian', 'honduran', 'somalian', 'sudanese']
+
+other_stop_words = ['high in...', 'bread machine', 'small appliance', 'yam/sweet potato', 'potato', 'onion', 'lemon', 
+                    'pork', 'whole chicken', 'chicken', 'poultry', 'lamb/sheep', 'green', 'pineapple', 'tropical fruit', 'duck', 'raspberry', 'berry', 'apple', 'pear', 'pepper', 'long grain rice', 'black bean', 'bean', 'refrigerator', 'microwave', 'chicken thigh & leg', 
+                    'freezer', 'oven', 'stove top', 'free of...', 'gelatin', 'goose', 'grain', 'grape', 'gumbo', 'halibut', 'ham', 'lentil', 'lime', 'liver', 'lobster', 'cheese', 'meatball', 'meatloaf', 'medium grain rice', 'melon', 'mixer', 'moose', 'chicken brest',
+                    'mussel', 'nut', 'orange', 'orange roughy', 'oyster', 'papaya', 'pasta shell', 'peanut butter', 'penne', 'perch', 'pheasant', 'plum', 'pressure cooker', 'quail', 'rabbit', 'rice', 'roast beef', 'scone', 'short grain rice', 'soy/tofu', 'steak',
+                    'spaghetti', 'spinach', 'spread', 'squid', 'strawberry', 'tart', 'thigh & leg', 'tilapia', 'trout', 'tuna', 'turkey breast', 'welsh', 'white rice', 'whitefish', 'whole', 'whole turkey', 'yam/sweetbass', 'bear', 'beef liver', 'beef organ meat', 
+                    'breast', 'brown rice', 'catfish', 'cauliflower', 'cheesecake', 'cherry', 'chocolate chip cooky', 'chowder', 'clear soup', 'coconut', 'crab', 'crawfish', 'cookie & brownie', 'corn', 'beef kidney', 'pasta elbow', 'halloween cocktail', 'pot roast', 
+                    'breakfast egg', 'bean soup', 'egg breakfast', 'spaghetti sauce', 'crock pot slow cooker', 'turkey gravy', 'cabbage', 'lemon cake', 'chicken stew', 'marinara sauce', 'summer dip', 'peanut butter pie', 'served hot new year', 'ham and bean soup', 'bread pudding', 
+                    'margarita', 'beef sauce', 'for large group holiday/event', 'navy bean soup', 'cranberry sauce', 'pork loin', 'baked bean', 'black bean soup', 'cucumber', 'main dish casserole', 'potato soup', 'beef crock pot', 'broccoli soup', 'apple pie', 'soup crock pot', 'roast beef crock pot', 
+                    'tomato sauce', 'chicken crock pot', 'beef sandwich', 'breakfast potato', 'breakfast casserole', 'strawberry dessert', 'dessert easy', 'dessert fruit', 'coconut dessert', 'coconut cream pie', 'pork crock pot', 'high in... diabetic friendly', 'octopus', 'household cleaner', 'elk', 
+                    'pot pie', 'bass', 'artichoke', 'kiwifruit', 'duck breast', 'whole duck', 'mahi mahi', 'oatmeal', 'avocado', 'chicken liver', 'reynolds wrap contest', 'chard', 'macaroni and cheese', 'szechuan', 'collard green', 'mashed potato', 'veal', 'mango', 'steam']
 lemmatizer = WordNetLemmatizer()
-words_to_remove = [lemmatizer.lemmatize(m) for m in cultur_no_words]
-print(words_to_remove)
+#other_stop_words = [word.lower() for word in other_stop_words]
+#other_stop_words =  list(dict.fromkeys(other_stop_words))
+#print("this is otherstop words",other_stop_words)
+
+#words_to_remove = [lemmatizer.lemmatize(m) for m in cultur_no_words]
+#print(words_to_remove)
 #corpus = data.Keywords.apply(get_and_sort_corpus)
-test =[]
+#test =[]
 
 #ct =[x.lower() for x in categroy_no_words]
 #cultur_no_words = [x.lower() for x in cultur_no_words]
@@ -124,6 +146,27 @@ test =[]
 #print("this si country list", country_list)
 #print("test list",cultur_no_words)
 #print("words list",wors_list)
+
+
+
+recipe_df = pd.read_csv(r'app\csvfiles\parseddocuments.csv')
+
+vocabulary = nltk.FreqDist()
+for ingredients in recipe_df['parsed_categorylist_keywords']:
+    #print("see if its a list",ast.literal_eval(ingredients) ,  type(ast.literal_eval(ingredients)))
+    ingredients = ast.literal_eval(ingredients)
+    vocabulary.update(ingredients)
+
+for word, frequency in vocabulary.most_common(len(vocabulary)):
+    print(f'{word};{frequency}')
+fdist = nltk.FreqDist(ingredients)
+
+common_words = []
+for word, _ in vocabulary.most_common(len(vocabulary)):
+    common_words.append(word)
+print("common words:",common_words)
+
+
 
 
 #import re
