@@ -8,8 +8,7 @@ This file creates your application.
 from app import app, db, login_manager
 from flask import render_template, request, redirect, url_for, flash
 from flask_login import login_user, logout_user, current_user, login_required
-from app.forms import LoginForm, GetrecomForm
-from app.forms import LoginForm, newuser, UserProfile
+from app.forms import LoginForm, newuser,  GetrecomForm
 from app.models import User_Profile, UserLogin
 from werkzeug.security import check_password_hash, generate_password_hash
 from datetime import date, datetime
@@ -52,20 +51,7 @@ def login():
     flash_errors(form)          
     return render_template("login.html", form=form)
 
-@app.route('/profile', methods=['GET', 'POST'])
-@login_required
-def profile():
-    form = UserProfile()
-    if request.method == "POST":
-        if form.validate_on_submit():
-            ingredients = form.ingredients.data
-            allergies = form.allergies.data
-            fav_categories = form.fav_categories.data
-            today_date = date.today()
-            
-            print(ingredients, allergies, fav_categories)         
-             
-    return render_template("profile.html", form=form)
+
 
 @app.route('/sign-up', methods=['GET', 'POST'])
 def sign_up():
