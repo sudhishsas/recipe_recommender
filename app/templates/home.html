@@ -1,7 +1,42 @@
 {% extends "base.html" %}
-
 {% block main %}
-<h1 class="page-header">Lab 5 Starter Code</h1>
-<p class="lead">Use this starter template for Lab 5<br/>
-All you get are these files and mostly barebones HTML/CSS files.</p>
+<form method="Post">
+
+<h1 align="center">Recipe Recommender</h1>
+
+<div class="form-group">
+    <label for="Ingredients">Ingredient List</label>
+    <input
+        type="text"
+        class="form-control"
+        id="Ingredients"
+        name="Ingredients"
+        placeholder="Enter list of ingredients you already have"
+        />
+        
+</div>
+
+<div class="form-group">
+    <label for="Categories">Categories</label>
+    <input
+        type="text"
+        class="form-control"
+        id="Categories"
+        name="Categories"
+        placeholder="Enter Category of dish you are interested in"
+        />
+</div>
+
+
+<br />
+    <div class="col-md-12 text-center">
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
+</form>
+
+<div>
+    {{Ingredients}}
+</div>
 {% endblock %}
+
+

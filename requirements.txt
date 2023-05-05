@@ -13,6 +13,7 @@ nltk
 pandas
 unidecode
 Word2Vec
+email_validator
 
 # ----------------------
 # Production Server

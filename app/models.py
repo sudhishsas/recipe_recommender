@@ -18,10 +18,12 @@ class UserLogin(db.Model):
     password= db.Column(db.String(255))
 
 
-    def __init__(self, first_name, last_name, username, password):
+    def __init__(self, first_name, last_name, username, email, password, date):
         self.first_name = first_name
         self.last_name = last_name
         self.username = username
+        self.email = email
+        self.date = date
         self.password = generate_password_hash(password, method='pbkdf2:sha256')
 
 

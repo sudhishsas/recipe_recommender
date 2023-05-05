@@ -4,7 +4,7 @@
   <div class="login-form center-block">
     <h2>Please Log in</h2>
     {% include 'flash_messages.html' %}
-    <form action="{{ url_for('login') }}" method="post">
+    <form action="{{ url_for('login', next=request.args.get('next')) }}" method="post">
       {{ form.csrf_token }}
       <div class="form-group">
         {{ form.username.label }}
@@ -13,6 +13,9 @@
       <div class="form-group">
         {{ form.password.label }}
         {{ form.password(class='form-control',placeholder="Enter your Password") }}
+      </div>
+      <div class="form-group">
+        {{ form.remember_me }} {{ form.remember_me.label }}
       </div>
       <button type="submit" name="submit" class="btn btn-primary btn-block">Log in</button>
     </form>
