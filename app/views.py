@@ -10,6 +10,7 @@ from flask import render_template, request, redirect, url_for, flash, session
 from flask_login import login_user, logout_user, current_user, login_required
 from flask_session import Session
 from app.forms import LoginForm, newuser,  GetrecomForm, getprofileinfo
+from app.forms import LoginForm, newuser,  GetrecomForm
 from app.models import User_Profile, UserLogin
 from werkzeug.security import check_password_hash, generate_password_hash
 from datetime import date, datetime
