@@ -10,7 +10,7 @@ import numpy as np
 import csv
 
 from sklearn.metrics.pairwise import cosine_similarity
-from words_parser import ingredient_parser, category_parser
+from app.words_parser import ingredient_parser, category_parser
 from sklearn.feature_extraction.text import TfidfVectorizer
 from collections import defaultdict
 from gensim.models import Word2Vec

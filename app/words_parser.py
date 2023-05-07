@@ -12,7 +12,7 @@ import csv
 from nltk.stem import WordNetLemmatizer
 from nltk.corpus import wordnet
 from collections import Counter
-import config
+import app.config
 
 
 

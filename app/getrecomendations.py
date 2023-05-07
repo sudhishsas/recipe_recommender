@@ -4,11 +4,11 @@ import ast
 import unidecode
 
 from sklearn.metrics.pairwise import cosine_similarity
-from words_parser import ingredient_parser
+from app.words_parser import ingredient_parser
 from sklearn.feature_extraction.text import TfidfVectorizer
 from collections import defaultdict
 from gensim.models import Word2Vec
-from getdocsforcategory import getsortedcategorycsv
+from app.getdocsforcategory import getsortedcategorycsv
 
 
 def get_recommendations(N, scores,categories):
@@ -33,6 +33,7 @@ def get_recommendations(N, scores,categories):
     count = 0
     for i in top:
 
+        recommendation.at[count, "RecipeId"] = df_recipes["RecipeId"][i]
         recommendation.at[count, "recipe_name"] = df_recipes["Name"][i]
         recommendation.at[count, "ingredients"] = df_recipes["RecipeIngredientParts"][i]
         recommendation.at[count, "category"] = df_recipes["Keywords_parsed"][i]
@@ -102,9 +103,9 @@ class TfidfEmbeddingVectorizer(object):
             # )
             return np.zeros(self.vector_size)
         else:
-            print("before",mean)
+            #print("before",mean)
             mean = np.array(mean).mean(axis=0)
-            print("mean after",mean)
+            #print("mean after",mean)
             return mean
 
     def word_average_list(self, docs):
@@ -168,12 +169,12 @@ def get_recs(ingredients, N, categories):
     input = input.split(",")
     # parse ingredient list
     input = ingredient_parser(input)
-    print("this is input", input)
+    #print("this is input", input)
     # get embeddings for ingredient doc
     input_embedding = tfidf_vec_tr.transform([input])[0].reshape(1, -1)
     
     #print("This is doc_vec", doc_vec)
-    print("this is input embeding", input_embedding)
+    #print("this is input embeding", input_embedding)
 
     # get cosine similarity between input embedding and all the document embeddings
     cos_sim = map(lambda x: cosine_similarity(input_embedding, x)[0][0], doc_vec)
@@ -190,7 +191,7 @@ def get_recs(ingredients, N, categories):
 #    print(type(ast.literal_eval(i)))
 
 #"peas, rice , oat, flour, yam, banana, cucumber, mango , ginger, pork"
-input = "kiwi,banana,grapes,raspberries,black berries,milk,peanutbutter"
-categories = ['sweet','beverage']
-rec = get_recs(input, 10, categories)
-print(rec)
+#input = "kiwi,banana,grapes,raspberries,black berries,milk,peanutbutter"
+#categories = ['sweet','beverage']
+#rec = get_recs(input, 10, categories)
+#print(rec)

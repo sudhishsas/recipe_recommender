@@ -9,12 +9,19 @@ Flask-Migrate
 Flask-Login
 psycopg2
 python-dotenv
+pandas
 numpy
 nltk
 pandas
 unidecode
 Word2Vec
 email_validator
+Flask-Session 
+autocorrect
+tkinter
+pyspellchecker
+sklearn
+gensim
 
 # ----------------------
 # Production Server

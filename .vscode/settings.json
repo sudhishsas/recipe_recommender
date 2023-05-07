@@ -1,4 +1,5 @@
 {
     "editor.wordWrapColumn": 10000000,
-    "diffEditor.wordWrap": "off"
+    "diffEditor.wordWrap": "off",
+    "python.analysis.typeCheckingMode": "off"
 }

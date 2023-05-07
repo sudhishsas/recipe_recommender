@@ -2,6 +2,23 @@ from . import db
 from werkzeug.security import generate_password_hash
 from datetime import datetime
 
+class User_Profile(db.Model):
+
+    __tablename__ = 'user_profile'
+
+    id = db.Column(db.Integer, primary_key=True)
+    ingredients = db.Column(db.TEXT,nullable=True)
+    alergies = db.Column(db.TEXT,nullable=True)
+    fav_categories = db.Column(db.TEXT,nullable=True)
+    date_added = db.Column(db.DateTime, default = datetime.utcnow)
+
+
+    def __init__(self, id , ingredients, alergies, fav_categories, date_added):
+        self.id = id
+        self.ingredients = ingredients
+        self.alergies = alergies
+        self.fav_categories = fav_categories
+        self.date_added = date_added
 
 class UserLogin(db.Model):
     # You can use this to change the table name. The default convention is to use
@@ -46,23 +63,7 @@ class UserLogin(db.Model):
     def __repr__(self):
         return '<User %r>' % (self.username)
 
-class User_Profile(db.Model):
 
-    __tablename__ = 'members'
-
-    id = db.Column(db.Integer, primary_key=True)
-    ingredients = db.Column(db.TEXT,nullable=True)
-    alergies = db.Column(db.TEXT,nullable=True)
-    fav_categories = db.Column(db.TEXT,nullable=True)
-    date_added = db.Column(db.DateTime, default = datetime.utcnow)
-
-
-    def __init__(self, id , ingredients, alergies, fav_categories, date_added):
-        self.id = id
-        self.ingredients = ingredients
-        self.alergies = alergies
-        self.fav_categories = fav_categories
-        self.date_added = date_added
 
 
 

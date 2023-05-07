@@ -2,18 +2,62 @@
 
 {% block main %}
   <div class="login-form center-block">
-    <h2>Please Log in</h2>
+    
+    <h2 align="center" >Recipe Recommender</h2>
+    
     <form action="{{ url_for('getrecommendation') }}" method="post">
       {{ form.csrf_token }}
       {% include 'flash_messages.html' %}
+      <div>
+        
+        <p>{{ user_id }}</p>
+        <div class="form-group">
+          <br>
+              <h6>Your current ingredients Select to add for recommendation</h6>
+          {% if useringre != [] %}
+          <div class = "ingrelist">
+            <ol>
+              {% for ingre in useringre %}
+                <li> <input type="checkbox" name = "ingredient" value= "{{ ingre }}"/>&nbsp; {{ ingre }} </li>
+              {% endfor %}
+            </ol>
+          </div>
+          
+          {% endif %}
+          <br>
+          {{ form.ingredients.label }}
+          {{ form.ingredients(class='form-control', placeholder="Enter any extra ingredients you may have that you would like to use") }}
+        </div>
+        <br>
 
-
-      <div class="categorielist">
-        {{ form.categories.label(class_="form-label") }}
-        {{ form.categories(class_="list-group") }}
+        <div class="tip">Categories 
+          <span class="tiptext"><div id="cols">
+            <div class="categorielist">
+              {{ form.categories.label(class_="form-label") }}
+              {{ form.categories(class_="list-group") }}
+            </div>
+        </div></span>
+        </div>
+        <br>
+        <br>
+        <div class="form-group">
+              <h6>{{ form.num.label }}</h6>
+              <select name = "num" class="btn btn-primary dropdown-toggle" aria-label=".form-select-lg" required>
+                <option class="dropdown-item" value ="5" >5</option>
+                <option class="dropdown-item" value ="10" >10</option>
+                <option class="dropdown-item" value ="15" >15</option>
+                <option class="dropdown-item" value ="20" >20</option>
+                <option class="dropdown-item" value ="25" >25</option>
+                <option class="dropdown-item" value ="30" >30</option>
+                <option class="dropdown-item" value ="35" >35</option>
+                <option class="dropdown-item" value ="40" >40</option>
+              </select>
+        </div>
+            
       </div>
-
       
+
+      <br>
       <button type="submit" name="submit" class="btn btn-primary btn-block">Get Recommendation</button>
     </form>
   </div>

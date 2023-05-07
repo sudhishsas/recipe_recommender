@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% block main %}
+<form method="Post">
+
+<h1 align="center">Profile</h1>
+    <form class="form-inline" action="{{ url_for('profile') }}" method="POST">
+        {{ form.csrf_token }}
+        {% include 'flash_messages.html' %}
+        <div>
+          
+          <p>{{ user_id }}</p>
+          <div class="form-group">
+            <br>
+                <h6>Your current ingredients Select to remove</h6>
+            {% if useringre != [] %}
+            <div class = "ingrelist">
+              <ol>
+                {% for ingre in useringre %}
+                  <li> <input type="checkbox" name = "ingredient" value= "{{ ingre }}"/>&nbsp; {{ ingre }} </li>
+                {% endfor %}
+              </ol>
+            </div>
+            {% endif %}
+            <br>
+            {{ form.ingredients.label }}
+            {{ form.ingredients(class='form-control', placeholder="Enter any extra ingredients you may have that you would like to use") }}
+          </div>
+          <br>
+          <h6>Current favouret categories Select to remove</h6>
+
+          {% if user_cat != [] %}
+          <div class = "catlist">
+            <ol>
+              {% for cat in user_cat %}
+                <li> <input type="checkbox" name = "category" value= "{{ cat }}"/>&nbsp; {{ cat }}</li>
+              {% endfor %}
+            </ol>
+          </div>
+          
+          {% endif %}
+          <br>
+          <div class="tip">Categories 
+            <span class="tiptext"><div id="cols">
+              <div class="categorielist">
+                {{ form.categories.label(class_="form-label") }}
+                {{ form.categories(class_="list-group") }}
+              </div>
+          </div></span>
+          </div>
+        </div>
+        <br>
+
+          <h6>Current alergies Select to remove</h6>
+
+          {% if useral != [] %}
+          <ol>
+            {% for al in useral %}
+              <li> <input type="checkbox" name = "alergy" value= "{{ al }}"/>&nbsp; {{ al }}</li>
+            {% endfor %}
+          </ol>
+          {% endif %}
+          <br>
+        <div class="form-group">
+            {{ form.alergies.label }}
+            {{ form.alergies(class='form-control',placeholder="Enter your alergies") }}
+        </div>
+  
+        <br>
+        <button type="submit" name="submit" class="btn btn-primary btn-block">Update Profile</button>
+      </form>
+    </div>
+{% endblock %}
+
+
