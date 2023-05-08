@@ -9,7 +9,7 @@ import ast
 import unidecode
 
 from sklearn.metrics.pairwise import cosine_similarity
-from words_parser import ingredient_parser
+#from words_parser import ingredient_parser
 from sklearn.feature_extraction.text import TfidfVectorizer
 from collections import defaultdict
 from gensim.models import Word2Vec
@@ -67,6 +67,7 @@ category_words = ['savory', 'easy', '< 60 min', 'meat', 'dessert', '< 4 hour', '
                 'colombian', 'iraqi', 'labor day', 'bath/beauty', 'ethiopian', 'memorial day', 'tempeh', 'palestinian', 'chilean', 'nepalese', 'dehydrator', 'cambodian', 'homeopathy/remedies', 'icelandic', 'venezuelan', 'ecuadorean', 'hunan', 'college food', 'nigerian', 'costa rican', 'chinese new year', 
                 'guatemalan', 'mongolian', 'georgian', 'honduran', 'somalian', 'sudanese']
 
+time_words = ['< 60 min', '< 4 hour', '< 30 min', '< 15 min' ]
 other_stop_words = ['high in...', 'bread machine', 'small appliance', 'yam/sweet potato', 'potato', 'onion', 'lemon', 
                     'pork', 'whole chicken', 'chicken', 'poultry', 'lamb/sheep', 'green', 'pineapple', 'tropical fruit', 'duck', 'raspberry', 'berry', 'apple', 'pear', 'pepper', 'long grain rice', 'black bean', 'bean', 'refrigerator', 'microwave', 'chicken thigh & leg', 
                     'freezer', 'oven', 'stove top', 'free of...', 'gelatin', 'goose', 'grain', 'grape', 'gumbo', 'halibut', 'ham', 'lentil', 'lime', 'liver', 'lobster', 'cheese', 'meatball', 'meatloaf', 'medium grain rice', 'melon', 'mixer', 'moose', 'chicken brest',
@@ -78,6 +79,15 @@ other_stop_words = ['high in...', 'bread machine', 'small appliance', 'yam/sweet
                     'tomato sauce', 'chicken crock pot', 'beef sandwich', 'breakfast potato', 'breakfast casserole', 'strawberry dessert', 'dessert easy', 'dessert fruit', 'coconut dessert', 'coconut cream pie', 'pork crock pot', 'high in... diabetic friendly', 'octopus', 'household cleaner', 'elk', 
                     'pot pie', 'bass', 'artichoke', 'kiwifruit', 'duck breast', 'whole duck', 'mahi mahi', 'oatmeal', 'avocado', 'chicken liver', 'reynolds wrap contest', 'chard', 'macaroni and cheese', 'szechuan', 'collard green', 'mashed potato', 'veal', 'mango', 'steam']
 lemmatizer = WordNetLemmatizer()
+txy = []
+tyt=[]
+for i in category_words:
+    if i in country_list or i in time_words:
+        txy.append(i)
+    else:
+        tyt.append(i)
+print("new country list",tyt)
+
 #other_stop_words = [word.lower() for word in other_stop_words]
 #other_stop_words =  list(dict.fromkeys(other_stop_words))
 #print("this is otherstop words",other_stop_words)
@@ -149,22 +159,24 @@ lemmatizer = WordNetLemmatizer()
 
 
 
-recipe_df = pd.read_csv(r'app\csvfiles\parseddocuments.csv')
+#recipe_df = pd.read_csv(r'app\csvfiles\parseddocuments.csv')
 
-vocabulary = nltk.FreqDist()
-for ingredients in recipe_df['parsed_categorylist_keywords']:
+#vocabulary = nltk.FreqDist()
+#for ingredients in recipe_df['ingredients_parsed']:
     #print("see if its a list",ast.literal_eval(ingredients) ,  type(ast.literal_eval(ingredients)))
-    ingredients = ast.literal_eval(ingredients)
-    vocabulary.update(ingredients)
+#    ingredients = ast.literal_eval(ingredients)
+#    vocabulary.update(ingredients)
+#wdlist= []
+#for word, frequency in vocabulary.most_common(len(vocabulary)):
+    #print(f'{word};{frequency}')
+#    wdlist.append([word, frequency])
+#print(wdlist)
+#fdist = nltk.FreqDist(ingredients)
 
-for word, frequency in vocabulary.most_common(len(vocabulary)):
-    print(f'{word};{frequency}')
-fdist = nltk.FreqDist(ingredients)
-
-common_words = []
-for word, _ in vocabulary.most_common(len(vocabulary)):
-    common_words.append(word)
-print("common words:",common_words)
+#common_words = []
+#for word, _ in vocabulary.most_common(len(vocabulary)):
+#    common_words.append(word)
+#print("common words:",common_words)
 
 
 

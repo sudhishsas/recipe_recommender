@@ -3,16 +3,17 @@ body {
 }
 
 .categorielist{
-    -moz-column-count: 5;
-    -moz-column-gap: 10px;
-    -webkit-column-count: 5;
-    -webkit-column-gap: 10px;
-    column-count: 5;
-    column-gap: 10px;
-    text-size-adjust: 70%;
-    line-height: 0.8;
-    background-color: black;
-    color: #fff;
+    -moz-column-count: 3;
+    -moz-column-gap: 20px;
+    -webkit-column-count: 3;
+    -webkit-column-gap: 20px;
+    column-count: 3;
+    column-gap: 20px;
+    text-size-adjust: 30%;
+    line-height: 0.2;
+    background-color: rgb(0, 0, 0);
+    color: #ffffff;
+    width:fit-content;
 }
 
 
@@ -44,6 +45,26 @@ body {
   color: #fff;
   padding: 10px 0;
   border-radius: 3px;
+}
+
+.Category{
+  -moz-column-count: 5;
+    -moz-column-gap: 10px;
+    -webkit-column-count: 5;
+    -webkit-column-gap: 10px;
+    column-count: 5;
+    column-gap: 10px;
+    text-size-adjust: 70%;
+    line-height: 0.8;
+    background-color: rgb(70, 69, 69);
+    color: #fff;
+    padding: 20px 0;
+    
+}
+
+.Category ol li{
+  list-style-type: none;
+  padding: 10px 0;
 }
 
 .tip {
@@ -83,4 +104,49 @@ body {
 
 ol.list-group{
   text-size-adjust: 70%;
+}
+
+.tipper {
+  position: relative;
+  display: inline-block;
+  border-bottom: 1px dotted rgb(0, 0, 0);
+}
+
+.tipper .tippertext {
+  visibility: hidden;
+  width: 1080px;
+  background-color: rgb(0, 0, 0);
+  color: #fff;
+  text-align: center;
+  border-radius: 10px;
+  padding: 10px 0;
+
+  /* Position the tip */
+  position: absolute;
+  z-index: 1;
+}
+
+.tipper:hover .tippertext {
+  visibility: visible;
+  width:max-content
+}
+
+.category {
+  -moz-column-count: 5;
+    -moz-column-gap: 10px;
+    -webkit-column-count: 5;
+    -webkit-column-gap: 10px;
+    column-count: 5;
+    column-gap: 10px;
+    text-size-adjust: 70%;
+    line-height: 0.8;
+    background-color: rgb(255, 255, 255);
+    color: #000000;
+    padding: 20px 0;
+     
+}
+
+.category ol li{
+  list-style-type: none;
+  padding: 5px 0;
 }

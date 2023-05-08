@@ -30,15 +30,105 @@
         </div>
         <br>
 
-        <div class="tip">Categories 
-          <span class="tiptext"><div id="cols">
-            <div class="categorielist">
-              {{ form.categories.label(class_="form-label") }}
-              {{ form.categories(class_="list-group") }}
-            </div>
-        </div></span>
+        <hr>
+          <br>
+          <h6>Categories</h6>
+          
+          <div class = Category>
+            <ol>
+              <li>
+                <div class="tipper">Preperation Type 
+                  <span class="tippertext"><div id="cols">
+                    <div class="categorielist">
+                      {{ form.preptype.label(class_="form-label") }}
+                      {{ form.preptype(class_="list-group") }}
+                    </div>
+                </div></span>
+                </div>
+              </li>
+
+              <li>
+                <div class="tipper">Time to Cook 
+                  <span class="tippertext"><div id="cols">
+                    <div class="categorielist">
+                      {{ form.time.label(class_="form-label") }}
+                      {{ form.time(class_="list-group") }}
+                    </div>
+                </div></span>
+                </div>
+              </li>
+
+              <li>
+                <div class="tipper">Difficulty 
+                  <span class="tippertext"><div id="cols">
+                    <div class="categorielist">
+                      {{ form.diff.label(class_="form-label") }}
+                      {{ form.diff(class_="list-group") }}
+                    </div>
+                </div></span>
+                </div>
+              </li>
+
+              <li>
+                <div class="tipper">Food Type 
+                  <span class="tippertext"><div id="cols">
+                    <div class="categorielist">
+                      {{ form.fotype.label(class_="form-label") }}
+                      {{ form.fotype(class_="list-group") }}
+                    </div>
+                </div></span>
+                </div>
+              </li>
+
+              <li>
+                <div class="tipper">Event Type 
+                  <span class="tippertext"><div id="cols">
+                    <div class="categorielist">
+                      {{ form.events.label(class_="form-label") }}
+                      {{ form.events(class_="list-group") }}
+                    </div>
+                </div></span>
+                </div>
+              </li>
+
+              <li>
+                <div class="tipper">Seasonal  
+                  <span class="tippertext"><div id="cols">
+                    <div class="categorielist">
+                      {{ form.seas.label(class_="form-label") }}
+                      {{ form.seas(class_="list-group") }}
+                    </div>
+                </div></span>
+                </div>
+              </li>
+
+              <li>
+                <div class="tipper">Misc 
+                  <span class="tippertext"><div id="cols">
+                    <div class="categorielist">
+                      {{ form.misc.label(class_="form-label") }}
+                      {{ form.misc(class_="list-group") }}
+                    </div>
+                </div></span>
+                </div>
+              </li>
+
+            </ol>
+            
+          </div>
+ 
         </div>
-        <br>
+        <h6>Selected categories</h6>
+            <div>
+              {% if selcat != [] %}
+              <ol>
+                {% for cat in selcat %}
+                  <li> {{ cat }} </li>
+                {% endfor %}
+              </ol>
+              {% endif %}
+            </div>
+        <hr>
         <br>
         <div class="form-group">
               <h6>{{ form.num.label }}</h6>
@@ -60,5 +150,28 @@
       <br>
       <button type="submit" name="submit" class="btn btn-primary btn-block">Get Recommendation</button>
     </form>
+    {% if rnames != [] %}
+    <br>
+    <hr>
+    <br>
+    <div>
+      <h6>Your list of recommendations</h6>
+          
+          <div class = "recommendlist">
+            <ol>
+              {% for rname in rnames %}
+                <li> <a href="/viewrecipe/{{ rname }}">{{ rname }}</a> </li>
+              {% endfor %}
+            </ol>
+          </div>
+          
+          
+    </div>
+    {% endif %}
+
+
   </div>
+
+
+
 {% endblock %}

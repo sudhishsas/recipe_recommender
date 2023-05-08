@@ -42,7 +42,7 @@ def ingredient_parser(ingreds):
         "c","pint","p","pt","fl pt","quart","q","qt","fl qt","gallon","g","gal","ml","milliliter","millilitre","cc",
         "mL","l", "liter","litre","L","dl","deciliter","decilitre","dL","bulb","level","heaped","rounded","whole","pinch","medium","slice","pound","lb","#","ounce","oz","mg","milligram","milligramme",
         "g","gram","gramme","kg","kilogram","kilogramme","x","of","mm","millimetre","millimeter","cm",
-        "centimeter","centimetre","m","meter","metre","inch","in","milli","centi","deci","hecto","kilo"]
+        "centimeter","centimetre","m","meter","metre","inch","in","milli","centi","deci","hecto","kilo", "hand", "hand full"]
     
     words_to_remove = ["fresh", "minced", "chopped" "oil", "a", "red", "bunch", "and", "or", "leaf","large", "extra", "sprig", "ground", "handful","free", "small", "pepper", "virgin", "range", "from", "dried","sustainable","black","peeled", "higher", "welfare", "seed", "for","finely", "freshly","sea",
         "quality","white", "ripe", "few", "piece", "source", "to", "organic","flat", "smoked", "sliced", "green", "picked", "the", "stick","plain", "plus","mixed", "bay", "your", "cumin", "optional", "fennel", "serve", "mustard", "unsalted", "baby", "paprika", "fat", "ask", "natural","skin", "roughly", "into", "such", "cut", "good","brown",
@@ -99,7 +99,8 @@ def ingredient_parser(ingreds):
     # ingred_list = " ".join(ingred_list)
     return ingred_list
 
-
+#input = "kiwi,bunch of bananas,grapes,raspberries,black berries,1 gallon of milk,peanutbutter"
+#print(ingredient_parser(input.split(",")))
 #data = pd.read_csv('app\parsed_recipesv4.csv')
 #test = ingredient_parser(data.RecipeIngredientParts.apply(ingredient_parser))
 #for tes in test:

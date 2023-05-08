@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block main %}
+<h1 class="page-header">About</h1>
+
+    <div class="card mb-3">
+        <img class="card-img-top" src="..." alt="Card image cap">
+        <div class="card-body">
+        <h4 class="card-title">{{rname}}</h4>
+        <hr>
+        <br>
+        <h6> Category </h6>
+        <div class = "category">
+            {% if reccat != [] %}
+            <ol>
+              {% for cat in reccat %}
+                <li> {{ cat }} </li>
+              {% endfor %}
+            </ol>
+            {% endif %}
+          </div>
+
+        <br>
+        <hr>
+
+        <h6> Ingredients </h6>
+        <div>
+            {% if recing != [] %}
+            <ol>
+              {% for ing in recing %}
+                <li> {{ ing }} </li>
+              {% endfor %}
+            </ol>
+            {% endif %}
+          </div>
+          <br>
+          <hr>
+  
+          <h6> Instructions Steps </h6>
+          <div>
+              {% if recinstruct != [] %}
+              <ol>
+                {% for inst in recinstruct %}
+                  <li> {{ inst }} </li>
+                {% endfor %}
+              </ol>
+              {% endif %}
+            </div>
+        
+        </div>
+    </div>
+
+{% endblock %}

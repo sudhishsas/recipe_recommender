@@ -17,6 +17,10 @@ from datetime import date, datetime
 from autocorrect import Speller
 from tkinter import *
 from spellchecker import SpellChecker
+import pandas as pd
+import numpy as np
+import re
+import ast
 
 from app.getrecomendations import get_recs
 
@@ -57,7 +61,8 @@ def profile():
             ingre = list(ingre.split(","))
             ingre = list(i.lstrip() for i in ingre)
             ingre = list(corrector.correction(i) for i in ingre)
-            
+            if ingre == ["i"]:
+                ingre = ['']
             if ingredients == []:
                 if ingre == ['']:
                     
@@ -83,11 +88,20 @@ def profile():
                     newingre =  newingre[1:]
             
             category = request.form.getlist('category')
-            categor = request.form.getlist('categories')
-            categor = list(i.lstrip() for i in categor)
+            prept = request.form.getlist('preptype')
+            time = request.form.getlist('time')
+            dif = request.form.getlist('diff')
+            ftype = request.form.getlist('fotype')
+            event = request.form.getlist('events')
+            sse = request.form.getlist('seas')
+            msc = request.form.getlist('misc')
 
+            #print("prept, time, dif, ftype, event, sse, msc",  prept, time, dif, ftype, event, sse, msc)
+            categor = prept+ time+ dif + ftype+ event+sse+msc
+            categor = list(i.lstrip() for i in categor)
+            
             if category == []:
-                if category == []:
+                if categor == []:
                     newcat = ','.join(usercpycat)
                 else:
                     for i in categor:
@@ -102,14 +116,18 @@ def profile():
                 for t in categor:
                     if t in usercpycat:
                         usercpycat.remove(t)
-                newcat = ','.join(categor + usercpycat)      
+                newcat = ','.join(categor + usercpycat) 
 
+            
             allergies = request.form.getlist('alergy')
             allergi = request.form['alergies']
             allergi = list(allergi.split(","))
             allergi = list(i.lstrip() for i in allergi)
             allergi = list(corrector.correction(i) for i in allergi)
             print("th isi aletgies", allergi, allergies)
+            if allergi == ["i"]:
+                allergi = ['']
+
             if allergies == []:
                 if allergi == ['']:
                     if allergi in usercpyallr:
@@ -201,7 +219,7 @@ def sign_up():
             emails = form.email.data
             password = form.password.data
             today_date = date.today()
-            
+            print("came to the submit ")
             
             user = UserLogin.query.filter_by(username=username).first()
             t = UserLogin.query.filter_by(email= emails).all()
@@ -228,7 +246,7 @@ def sign_up():
                 newprofile = User_Profile( id = tr[-1].id  , ingredients ="" , alergies="" , fav_categories = "" , date_added = today_date)
                 db.session.add(newprofile)
                 db.session.commit()
-
+                print("came here")
                 login_user(new_user, remember=True)
                 session["user_id"] = tr[-1].id
                 flash('Account created successfully.', 'success')
@@ -244,6 +262,7 @@ def about():
     return render_template('about.html')
 
 
+
 @app.route("/getrecommendation", methods =["GET","POST"])
 @login_required
 def getrecommendation():
@@ -253,7 +272,7 @@ def getrecommendation():
         print("this is the front end print",getuseringred(user_id).id)
         
         useringre = list(getuseringred(user_id).ingredients.split(","))
-    
+        rnames = []
         if request.method == "POST":
             
             ingredients = request.form.getlist('ingredient')
@@ -274,24 +293,76 @@ def getrecommendation():
             print("this is the final input", ingreinput)
 
             categor = request.form.getlist('categories')
+            prept = request.form.getlist('preptype')
+            time = request.form.getlist('time')
+            dif = request.form.getlist('diff')
+            ftype = request.form.getlist('fotype')
+            event = request.form.getlist('events')
+            sse = request.form.getlist('seas')
+            msc = request.form.getlist('misc')
+
+            #print("prept, time, dif, ftype, event, sse, msc",  prept, time, dif, ftype, event, sse, msc)
+            categor = prept+ time+ dif + ftype+ event+sse+msc
             categor = list(i.lstrip() for i in categor)
+            #categor = list(i.lstrip() for i in categor)
             
             print("caterory ", categor)
 
             num = request.form['num']
 
-            print("this is the number list",num)
-            recoms = get_recs(ingreinput, int(num), categor)
-            print(recoms)
-            print(type(recoms))
-            print(type(recoms['RecipeId'].tolist()))
+            print("this is the number list", num)
+            recs = get_recs(ingreinput, int(num), categor)
+            
+            
+            #session["recoms_id"] = recoms
+            session["recommendations"] = recs
 
-            return redirect(url_for('getrecommendation'))
-        return render_template('getrecom.html', form = form , user_id = user_id, useringre = useringre) 
+            if "user_id" in session and "recommendations" in session:
+                user_id = session["user_id"]
+                recoms = session["recommendations"]
+                
+                print("this is the front end print",getuseringred(user_id).id)
+                print("these are the recomended recipes", recoms)
+                print(recoms['RecipeId'].tolist())
+                rnames = recoms['recipe_name'].tolist()
+                print("rnames list",rnames)
+                
+            
+            return render_template('getrecom.html', form = form , user_id = user_id, useringre = useringre, rnames= rnames, selcat = categor)
+        return render_template('getrecom.html', form = form , user_id = user_id, useringre = useringre, rnames= rnames) 
     else:
         return redirect(url_for("login"))
 
+@app.route("/viewrecipe/<recipeName>")
+@login_required
+def viewrecipes(recipeName):
+    if "user_id" in session and "recommendations" in session:
+        user_id = session["user_id"]
+        recoms = session["recommendations"]
 
+        recings = recoms['ingredients'].tolist()
+        reccats = recoms['category'].tolist()
+        indcheck = recoms['recipe_name'].tolist()
+        recinstructs =recoms['recipe_instructions'].tolist()
+        count = 0
+
+        recing = []
+        reccat = []
+        recinstruct = []
+        for i in indcheck:
+            
+            if i == recipeName:
+                recing = ast.literal_eval(recings[count])
+                reccat = ast.literal_eval(reccats[count])
+                recinstruct = recinstructs[count]
+            count+=1
+       
+        i = recinstruct.replace("]", "")
+        recinstruct = i.replace("[", "")
+
+        recinstruct= list(recinstruct.split(","))
+        return render_template("viewrecipe.html", rname = recipeName, recing = recing, reccat = reccat, recinstruct = recinstruct)
+    return redirect(url_for("login"))
 
 @app.route("/secure-page")
 @login_required
