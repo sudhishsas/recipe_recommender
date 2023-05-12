@@ -4,5 +4,30 @@
 
 <h1 align="center">Recipe Recommender</h1>
     <p> this is the user id for the session logged in{{ user_id }}</p>
+    <hr>
+    <br>
+    <h4>WELCOME BACK {{ username }}</h4>
+    <hr>
+    <br>
+    {% if rnames != [] %}
+    <br>
+
+    
+    <hr>
+    <br>
+    <div>
+      <h6>Your Previous List of Recommendations</h6>
+          
+          <div class = "recommendlist">
+            <ol>
+              {% for rname in rnames %}
+                <li> <a href="/viewrecipe/{{ rname }}">{{ rname }}</a> </li>
+              {% endfor %}
+            </ol>
+          </div>
+          
+          
+    </div>
+    {% endif %}
 
 {% endblock %}

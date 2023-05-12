@@ -7,8 +7,10 @@
         {{ form.csrf_token }}
         {% include 'flash_messages.html' %}
         <div>
-          
-          <p>{{ user_id }}</p>
+          <div class="profile">
+            <div class="d-flex flex-column align-items-center"><img class="rounded-circle mt-2" width="150px" src="https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg"><span class="font-weight-bold"> {{username}} </span><span class="text-black-50"> {{email}} </span><span> </span></div>
+          </div>
+          <p>{{ user_id }} {{ fname }}  {{ lname }} {{ username }} {{ email }} </p>
           <div class="form-group">
             <br>
                 <h6>Your current ingredients Select to remove</h6>
@@ -139,10 +141,15 @@
             {% endfor %}
           </ol>
           {% endif %}
-          <br>
         <div class="form-group">
-            {{ form.alergies.label }}
-            {{ form.alergies(class='form-control',placeholder="Enter your alergies") }}
+          <div class="tipper"><p style="background: rgb(54, 131, 131); color: aliceblue; padding: 5%; width: max-content;"> Select Allergies</p> 
+            <span class="tippertext"><div id="cols">
+              <div class="categorielist">
+                {{ form.alergies.label(class_="form-label") }}
+                {{ form.alergies(class_="list-group") }}
+              </div>
+          </div></span>
+          </div>
         </div>
   
         <br>

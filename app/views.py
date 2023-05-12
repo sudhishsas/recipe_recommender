@@ -17,12 +17,13 @@ from datetime import date, datetime
 from autocorrect import Speller
 from tkinter import *
 from spellchecker import SpellChecker
+from textblob import TextBlob
 import pandas as pd
 import numpy as np
 import re
 import ast
-
 from app.getrecomendations import get_recs
+from app.words_parser import allergy_checker
 
 corrector = SpellChecker()
 spell = Speller(lang='en')
@@ -44,7 +45,10 @@ def profile():
 
         print("this is the front end print",getuseringred(user_id).id)
 
-        user_info = User_Profile.query.get_or_404(user_id)
+        user_info = UserLogin.query.get_or_404(user_id)
+        userupinfo = User_Profile.query.get_or_404(user_id)
+
+        #gets the users profile info 
         useringre = list(getuseringred(user_id).ingredients.split(","))
         user_cat = list(getuseringred(user_id).fav_categories.split(","))
         useral = list(getuseringred(user_id).alergies.split(","))
@@ -52,29 +56,42 @@ def profile():
         usercpycat = user_cat.copy()
         usercpyallr = useral.copy()
 
-        
+        #gets users personal info
+        fname = user_info.first_name
+        lname = user_info.last_name
+        username = user_info.username
+        email = user_info.email
+
+
         if request.method == "POST" and form.validate_on_submit():
 
             ingredients = request.form.getlist('ingredient')
             ingre = request.form['ingredients']
-            
+
+            #putting the ingredients into a list
             ingre = list(ingre.split(","))
             ingre = list(i.lstrip() for i in ingre)
-            ingre = list(corrector.correction(i) for i in ingre)
-            if ingre == ["i"]:
-                ingre = ['']
+            print("ingredients after strip", ingre)
+
+            #checks if the words entered are spelled correctly (spell checker)
+            newingre = []
+            for x in ingre:
+                if corrector.correction(x) != "i":
+                    if corrector.correction(x) == None:
+                        newingre.append(x)
+                    else:
+                        newingre.append(corrector.correction(x))
+            ingre = newingre.copy()
+            print("check ingredients",ingre, usercpyin)
+            
             if ingredients == []:
-                if ingre == ['']:
-                    
-                    if ingre in usercpyin:
-                        usercpyin.remove(ingre)
+                if ingre == []:
                     newingre = ','.join(usercpyin)
                 else:
                     for i in ingre:
                         if i in usercpyin:
                             usercpyin.remove(i)
                         newingre = ','.join(ingre + usercpyin)
-
             else:
                 for i in ingredients:
                     if i in usercpyin:
@@ -82,11 +99,11 @@ def profile():
                 for s in ingre:
                     if s in usercpyin:
                         usercpyin.remove(s)
-                
                 newingre = ','.join(ingre + usercpyin)
                 if newingre[0] == ",":
                     newingre =  newingre[1:]
-            
+            print("this is ingredients", newingre)
+            #gets the categories and creates a list of categories
             category = request.form.getlist('category')
             prept = request.form.getlist('preptype')
             time = request.form.getlist('time')
@@ -118,18 +135,14 @@ def profile():
                         usercpycat.remove(t)
                 newcat = ','.join(categor + usercpycat) 
 
-            
+            #reteive the allergy input and check for spelling errors
             allergies = request.form.getlist('alergy')
-            allergi = request.form['alergies']
-            allergi = list(allergi.split(","))
-            allergi = list(i.lstrip() for i in allergi)
-            allergi = list(corrector.correction(i) for i in allergi)
+            allergi = request.form.getlist('alergies')
+        
             print("th isi aletgies", allergi, allergies)
-            if allergi == ["i"]:
-                allergi = ['']
 
             if allergies == []:
-                if allergi == ['']:
+                if allergi == []:
                     if allergi in usercpyallr:
                         usercpyin.remove(allergi)
                     newallergi = ','.join(usercpyallr)
@@ -146,20 +159,30 @@ def profile():
                 for s in allergi:
                     if s in usercpyallr:
                         usercpyallr.remove(s)
+                print("seen it",allergi ,usercpyallr)
                 newallergi = ','.join(allergi + usercpyallr)
-                if newallergi[0] == ",":
-                    newallergi =  newallergi[1:]
+                
+                if newallergi !='':
+                    if newallergi[0] == ",":
+                        newallergi =  newallergi[1:]
             
-            user_info.ingredients = newingre
-            user_info.alergies = newallergi
-            user_info.fav_categories = newcat
-            user_info.date_added = today_date
+            print(newallergi)
+            #adds the new information to there assigned column 
+            userupinfo.ingredients = newingre
+            userupinfo.alergies = newallergi
+            userupinfo.fav_categories = newcat
+            userupinfo.date_added = today_date
+
+            #updates the database with the new information 
             db.session.commit()
             flash("Updated Profile Successfully :) ",'success')
+
+            #clears the form text feilds empty
             form.ingredients.data = ""
             form.alergies.data= ""
+
             return redirect(url_for('profile')) 
-        return render_template('profile.html', form = form , user_id = user_id, useringre = useringre, user_cat = user_cat, useral = useral) 
+        return render_template('profile.html', form = form , fname = fname , lname = lname , email = email, username= username, user_id = user_id, useringre = useringre, user_cat = user_cat, useral = useral) 
     else:
         return redirect(url_for("login"))
     """Render website's profile page."""
@@ -169,8 +192,27 @@ def profile():
 def home():
     if "user_id" in session:
         user_id = session["user_id"]
-        form = getprofileinfo()
-        return render_template('home.html', user_id = user_id) 
+        user_info = UserLogin.query.get_or_404(user_id)
+        #gets users personal info
+        fname = user_info.first_name
+        lname = user_info.last_name
+        username = user_info.username
+        email = user_info.email
+        rnames = []
+        
+        if "specurecom" in session:
+            user_id = session["user_id"]
+            
+            prevrecom = session["specurecom"]
+            
+        
+            if prevrecom[0] == user_id:
+                
+                recom = prevrecom[1]
+                rnames = recom['recipe_name'].tolist()
+
+        return render_template('home.html', user_id = user_id, rnames= rnames, fname= fname, lname =lname, username= username, email = email)
+
     else:
         return redirect(url_for("login"))
     """Render website's profile page."""
@@ -270,28 +312,49 @@ def getrecommendation():
         user_id = session["user_id"]
         form = GetrecomForm()
         print("this is the front end print",getuseringred(user_id).id)
-        
+
+        #gets the users saved ingredients form the user profile 
         useringre = list(getuseringred(user_id).ingredients.split(","))
         rnames = []
+        prnames= []
+
         if request.method == "POST":
-            
+
+            #gets the information from the form for ingredients
             ingredients = request.form.getlist('ingredient')
             ingre = request.form['ingredients']
+
+            #putting the ingredients into a list
             ingre = list(ingre.split(","))
             ingre = list(i.lstrip() for i in ingre)
-            ingre = list(corrector.correction(x) for x in ingre)
+            print("ingredients after strip", ingre)
             
-            if ingre == ['i']:
+
+            newingre = []
+            # Spell checking ingredients if the spell checker can not spell check then it would leave the word as is
+            for x in ingre:
+                if corrector.correction(x) != "i":
+                    if corrector.correction(x) == None:
+                        newingre.append(x)
+                    else:
+                        newingre.append(corrector.correction(x))
+            ingre = newingre.copy()
+            
+            if ingre == ['']:
                 ingreinput = ','.join(ingredients)
             else:
+                #remove any duplicate ingredients if the user had given the same ingredients as selected 
                 check = list(dict.fromkeys(ingre + ingredients))
+                print(check)
                 ingreinput = ','.join(check)
+            #if the user does not enter or selects any ingredients the recommender cannot be used so a error message is displayed to the user
             if ingreinput == "":
                 flash('Ingredients must be selected or added in order to get a recommendation', 'danger')
                 return redirect(url_for('getrecommendation'))
             
             print("this is the final input", ingreinput)
 
+            #gets all the categories from each type feild 
             categor = request.form.getlist('categories')
             prept = request.form.getlist('preptype')
             time = request.form.getlist('time')
@@ -302,53 +365,79 @@ def getrecommendation():
             msc = request.form.getlist('misc')
 
             #print("prept, time, dif, ftype, event, sse, msc",  prept, time, dif, ftype, event, sse, msc)
+            # adds all the categories to a single list
             categor = prept+ time+ dif + ftype+ event+sse+msc
             categor = list(i.lstrip() for i in categor)
-            #categor = list(i.lstrip() for i in categor)
             
             print("caterory ", categor)
 
+            #gets teh number of recommendations the user selected 
             num = request.form['num']
 
             print("this is the number list", num)
+            #calling the get_recs function to get the recommendations
             recs = get_recs(ingreinput, int(num), categor)
             
-            
-            #session["recoms_id"] = recoms
+            #checks if the session was created or has any information prior to the new recommendations this session is used to show the user there previous recommendations
+            if "specurecom" in session:
+                session.pop("specusrecom", None)
+
+            #this session is used like the first session but this one is used to hold the current recommendations, this clears the session to accept the new recommendations
+            if "recommendations" in session:
+                session.pop("recommendations", None)
+
+            # adding info to the sessions for current and prev recommendations
+            #prev
+            session["specurecom"] = [user_id, recs]
+            #current
             session["recommendations"] = recs
 
+
+            #checks if the recommendation session was made and has info before getting recommendation recipe names
             if "user_id" in session and "recommendations" in session:
                 user_id = session["user_id"]
                 recoms = session["recommendations"]
-                
-                print("this is the front end print",getuseringred(user_id).id)
-                print("these are the recomended recipes", recoms)
-                print(recoms['RecipeId'].tolist())
+
+                #gets the recipe names
                 rnames = recoms['recipe_name'].tolist()
-                print("rnames list",rnames)
-                
             
-            return render_template('getrecom.html', form = form , user_id = user_id, useringre = useringre, rnames= rnames, selcat = categor)
-        return render_template('getrecom.html', form = form , user_id = user_id, useringre = useringre, rnames= rnames) 
+            return render_template('getrecom.html', form = form , user_id = user_id, useringre = useringre, rnames= rnames, selcat = categor, prnames= prnames)
+        
+        #if theuser were to leave the recommendation page and come back to it this will check for prev recommendations and return them to the user 
+        if "specurecom" in session:
+            user_id = session["user_id"]
+            prevrecom = session["specurecom"]
+
+            #checks if the user id match 
+            if prevrecom[0] == user_id:
+                
+                recom = prevrecom[1]
+                prnames = recom['recipe_name'].tolist()
+
+        return render_template('getrecom.html', form = form , user_id = user_id, useringre = useringre, rnames= rnames, prnames= prnames) 
     else:
         return redirect(url_for("login"))
 
 @app.route("/viewrecipe/<recipeName>")
 @login_required
 def viewrecipes(recipeName):
+    
     if "user_id" in session and "recommendations" in session:
         user_id = session["user_id"]
         recoms = session["recommendations"]
-
+    
         recings = recoms['ingredients'].tolist()
         reccats = recoms['category'].tolist()
         indcheck = recoms['recipe_name'].tolist()
         recinstructs =recoms['recipe_instructions'].tolist()
-        count = 0
+        useral = list(getuseringred(user_id).alergies.split(","))
 
+        count = 0
         recing = []
         reccat = []
-        recinstruct = []
+
+        recinstruct = ''
+        #check if the recipe name matches and collects the information for that recipe
         for i in indcheck:
             
             if i == recipeName:
@@ -356,12 +445,23 @@ def viewrecipes(recipeName):
                 reccat = ast.literal_eval(reccats[count])
                 recinstruct = recinstructs[count]
             count+=1
-       
+        #checks for any of the users allergies relating to the current recipe ingredients
+        checkal = allergy_checker(recing)
+        finalal = []
+        for i in checkal:
+            if i in useral:
+                finalal.append(i)
+        if finalal != []:
+            flash('This recipe contains foods that you may be allergic to: Allergies ' + ','.join(finalal)  , 'danger')
+        
+        
         i = recinstruct.replace("]", "")
         recinstruct = i.replace("[", "")
-
         recinstruct= list(recinstruct.split(","))
+
         return render_template("viewrecipe.html", rname = recipeName, recing = recing, reccat = reccat, recinstruct = recinstruct)
+    
+    
     return redirect(url_for("login"))
 
 @app.route("/secure-page")
@@ -373,6 +473,7 @@ def secure_page():
 @app.route("/logout")
 @login_required
 def logout():
+    session.pop("specusrecom", None)
     session.pop("user_id", None)
     logout_user()
     flash("You have been logged out.", "danger")

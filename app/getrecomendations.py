@@ -23,8 +23,10 @@ def get_recommendations(N, scores,categories):
     else:
         print("came to category list")
         df_recipes = pd.read_csv(r"C:\xampp\htdocs\3161Database files\recipe_recommender\app\csvfiles\specific_category.csv", encoding= 'unicode_escape')
-    
-    #df_recipes = pd.read_csv(r'C:\xampp\htdocs\3161Database files\recipe_recommender\app\csvfiles\parseddocuments.csv', encoding= 'unicode_escape')
+        #uses the full document if there are no recipes with the combination of keywords for categories querried
+        if len(df_recipes["Keywords_parsed"]) == 0 :
+            df_recipes  = pd.read_csv(r"C:\xampp\htdocs\3161Database files\recipe_recommender\app\csvfiles\parsed_ingredients.csv", encoding= 'unicode_escape')
+
     # order the scores with and filter to get the highest N scores
     top = sorted(range(len(scores)), key=lambda i: scores[i], reverse=True)[:N]
     print("thi is top",top)
@@ -147,6 +149,9 @@ def get_recs(ingredients, N, categories):
         dataforsort = pd.read_csv(r'C:\xampp\htdocs\3161Database files\recipe_recommender\app\csvfiles\parseddocuments.csv')
         getsortedcategorycsv(dataforsort["Keywords_parsed"], categories)
         data = pd.read_csv(r"app\csvfiles\specific_category.csv", encoding= 'unicode_escape')
+        #uses the full document if there are no recipes with the combination of keywords for categories querried
+        if len(data["Keywords_parsed"]) == 0 :
+            data  = pd.read_csv(r"app\csvfiles\parsed_ingredients.csv", encoding= 'unicode_escape')
     
     # parse ingredients
     #data["parsed"] = data.RecipeIngredientParts.apply(ingredient_parser)

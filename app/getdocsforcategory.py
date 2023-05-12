@@ -9,24 +9,9 @@ import os
 import numpy as np
 import csv
 
-from sklearn.metrics.pairwise import cosine_similarity
-from app.words_parser import ingredient_parser, category_parser
-from sklearn.feature_extraction.text import TfidfVectorizer
-from collections import defaultdict
-from gensim.models import Word2Vec
-
-
 
 #input = "meat,savory"
 #rec = get_recs(input)
-
-def changetolist(values):
-    if isinstance(values, list):
-        keysw = values
-        
-    else:
-        keysw = ast.literal_eval(values)
-    return keysw
 
 
 # category sorter 

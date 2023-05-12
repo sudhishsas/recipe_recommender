@@ -1,13 +1,14 @@
 {% extends "base.html" %}
 
 {% block main %}
-<h1 class="page-header">About</h1>
+
 
     <div class="card mb-3">
         <img class="card-img-top" src="..." alt="Card image cap">
         <div class="card-body">
         <h4 class="card-title">{{rname}}</h4>
         <hr>
+        {% include 'flash_messages.html' %}
         <br>
         <h6> Category </h6>
         <div class = "category">

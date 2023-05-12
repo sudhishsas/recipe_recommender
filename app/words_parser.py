@@ -12,7 +12,7 @@ import csv
 from nltk.stem import WordNetLemmatizer
 from nltk.corpus import wordnet
 from collections import Counter
-import app.config
+#import app.config
 
 
 
@@ -57,8 +57,6 @@ def ingredient_parser(ingreds):
     
     
     # The ingredient list is now a string so we need to turn it back into a list. We use ast.literal_eval
-    #print("checkign list:",ingreds)
-    #print("haksd",type(ingreds))
     
     if isinstance(ingreds, list):
         ingredients = ingreds
@@ -85,9 +83,7 @@ def ingredient_parser(ingreds):
         # Turn everything to lowercase
         items = [word.lower() for word in items]
         # remove accents
-        items = [
-            unidecode.unidecode(word) for word in items
-        ]  #''.join((c for c in unicodedata.normalize('NFD', items) if unicodedata.category(c) != 'Mn'))
+        items = [unidecode.unidecode(word) for word in items]  
         # Lemmatize words so we can compare words to measuring words
         items = [lemmatizer.lemmatize(word) for word in items]
         # Gets rid of measuring words/phrases, e.g. heaped teaspoon
@@ -199,10 +195,7 @@ def category_parser(category):
         items = [unidecode.unidecode(word) for word in items]
         # Lemmatize words so we can compare words to measuring words
         items = [lemmatizer.lemmatize(word) for word in items]
-        # Gets rid of measuring words/phrases, e.g. heaped teaspoon
-        #items = [word for word in items if word not in other_stop_words]
-        # Get rid of common easy words
-        #items = [word for word in items if word not in category_no_words]
+        
         
         if items:
             category_words.append(" ".join(items))
@@ -238,7 +231,7 @@ def category_fixer(keywords):
     
     x = 0
     addedcategory = []
-     
+    data = pd.read_csv('app\parsed_recipesv4.csv') 
     for i in keywords:
         #check for desserts and make sure keywords has dessert in it.
         checkwords = ast.literal_eval(data['Keywords'][x])
@@ -303,18 +296,20 @@ def category_fixer(keywords):
 
 
 def addparsedddoctocsv(rec, input=0):
-    
+    #opens the csv file for writing 
     with open('app\csvfiles\parseddocuments.csv', 'w', encoding='UTF8', newline='') as file:
     
         writer = csv.writer(file)
-
+        #creats the header of the csv file with the rows titles
         writer.writerow(['RecipeId','Name','CookTime','RecipeCategory','Keywords_parsed','RecipeIngredientParts','RecipeInstructions','parsed_categorylist_keywords','ingredients_parsed'])
         
+        #reads form the csv files that has the data needed to create the new csv
         df_recipes = pd.read_csv(r'C:\xampp\htdocs\3161Database files\recipe_recommender\app\csvfiles\parsed_Categories.csv')
         dff_recipes = pd.read_csv(r'C:\xampp\htdocs\3161Database files\recipe_recommender\app\csvfiles\parsed_ingredients.csv')
         
         rows = []
         print("started adding the docs to the file")
+        #loops the lenght of the origonal csv
         for i in range(len(rec)):
             rows.clear()
             recipeid = df_recipes["RecipeId"][i]
@@ -327,13 +322,9 @@ def addparsedddoctocsv(rec, input=0):
             instructions = df_recipes["RecipeInstructions"][i]
             parsedcatergorylist = df_recipes["parsed_categorylist_keywords"][i]
 
-            #check = all(u in parsed_catergoywords for u in input)
-
-            
+            #creates a row of data collected for the  id 
             rows.append([recipeid, name, cooktime, categories, Keywords_parsed, ingredients, instructions, parsedcatergorylist, ingredientsparsed])
-
-            #t = ', '.join(map(lambda x: '"'+ str(x) + '"', rows[0]))
-            
+            #writes the row of info to the csv file
             writer.writerow(rows[0])
 
     file.close()
@@ -343,3 +334,49 @@ def addparsedddoctocsv(rec, input=0):
 
 #data = pd.read_csv(r'C:\xampp\htdocs\3161Database files\recipe_recommender\app\csvfiles\updated_Categories.csv')
 #tester = addparsedddoctocsv(data["Keywords_parsed"])
+
+
+def allergy_checker(ingre):
+    #dictionary of alergies and the related foods fo the allergies 
+    common_allergens = {
+    'Milk Allergy': {'Cheese', 'Butter', 'Margarine', 'Yogurt', 'cream', 'Whey', 'cottage', 'Ghee', 'Half and Half', 'Chocolate'},
+    'Egg Allergy': {'egg'},
+    'Tree Nut Allergy': {'nut', 'Almond', 'Cashew', 'Macadamia', 'Pistachio','Pine','Walnut', 'Pistachio', 'Pecan', 'Hazelnut'},
+    'Peanurt Allergy': {'peanut'},
+    'ShellFish Allergy': {'Shrimp','Prawn','Crayfish', 'Lobster', 'Squid', 'Scallop', 'Clam', 'Crab', 'Oyster', 'Mussle' },
+    'Wheat': {'flour', 'wheat', 'pasta', 'noodle', 'bread', 'crust', 'Bulgur', 'Pasta', 'malt', 'starch', 'Soy' },
+    'Soy Allergy': {'soy', 'tofu', 'lecithin'},
+    'Fish Allergy': {'fish', 'seafood', 'Flounder', 'mackerel', 'swordfish', 'Alaskan salmon', 'Salmon', 'Cod', 'Herring', 'mahi', 'Perch', 'Sardine', 'Striped bass', 'Tuna'},
+    'Sesame Allergy':{'sesame', 'tahini'}
+    }
+    lemmatizer = WordNetLemmatizer()
+    
+    ingrepar =[]
+    #loops throught each ingredient
+    for i in ingre:
+        items = re.split(" |-", i)
+        # Get rid of words containing non alphabet letters
+        items = [word for word in items if word.isalpha()]
+        # Turn everything to lowercase
+        items = [word.lower() for word in items]
+        # remove accents
+        items = [unidecode.unidecode(word) for word in items]  
+        # Lemmatize words so we can compare words to measuring words
+        items = [lemmatizer.lemmatize(word) for word in items]
+        ingrepar= ingrepar +items
+
+    allergy =[]
+    #takes a ingredient and checks if it is a valid value in the dictionary and returnes the corresponding key
+    def get_key(val):
+        for key, value in common_allergens.items():
+            if val in list(value):
+                return key
+        return False   
+     
+    for tl in ingrepar:
+        if get_key(tl) != False:
+            allergy.append(get_key(tl))
+    
+    return list(dict.fromkeys(allergy))
+
+#allergy_checker(['tomatoes', 'rice', 'cheese', 'parsley', 'sausage', 'paprika', 'salt', 'black pepper', 'Mahi-mahi', 'peanuts'])

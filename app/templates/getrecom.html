@@ -4,7 +4,24 @@
   <div class="login-form center-block">
     
     <h2 align="center" >Recipe Recommender</h2>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.js"></script>
+    <script>
+      //paste this code under the head tag or in a separate js file.
+    // Wait for window load
+    $(window).load(function() {
+      // Animate loader off screen
+      $(".se-pre-con").fadeOut("slow");;
+    });
+    </script>
+
     
+    <div class="se-pre-con">
+        <div class="loader-wrapper">
+          <div id="loader"></div>
+          <div style="display:none;" id="myDiv" class="animate-bottom"></div>
+        </div>  
+      </div>
     <form action="{{ url_for('getrecommendation') }}" method="post">
       {{ form.csrf_token }}
       {% include 'flash_messages.html' %}
@@ -118,9 +135,10 @@
           </div>
  
         </div>
-        <h6>Selected categories</h6>
-            <div>
+        
               {% if selcat != [] %}
+              <h6>Selected categories</h6>
+              <div>
               <ol>
                 {% for cat in selcat %}
                   <li> {{ cat }} </li>
@@ -148,27 +166,44 @@
       
 
       <br>
-      <button type="submit" name="submit" class="btn btn-primary btn-block">Get Recommendation</button>
+      <button class = "button" type="submit" name="submit" class="btn btn-primary btn-block" onclick="this.classList.toggle('button--loading')"><span class="button__text">Get Recommendation</span></button>
+
     </form>
-    {% if rnames != [] %}
+    
+    {% if prnames != [] %}
     <br>
     <hr>
     <br>
     <div>
-      <h6>Your list of recommendations</h6>
+      <h6>Your list of Prev Recommendations</h6>
           
           <div class = "recommendlist">
             <ol>
-              {% for rname in rnames %}
-                <li> <a href="/viewrecipe/{{ rname }}">{{ rname }}</a> </li>
+              {% for prname in prnames %}
+                <li> <a href="/viewrecipe/{{ prname }}">{{ prname }}</a> </li>
               {% endfor %}
             </ol>
           </div>
+          {% endif %}
+          {% if rnames != [] %}
+          <br>
+          <hr>
+          <br>
+          <div>
+            <h6>Your list of recommendations</h6>
+                
+                <div class = "recommendlist">
+                  <ol>
+                    {% for rname in rnames %}
+                      <li> <a href="/viewrecipe/{{ rname }}">{{ rname }}</a> </li>
+                    {% endfor %}
+                  </ol>
+                </div>
+                
+                
+          </div>
+          {% endif %}
           
-          
-    </div>
-    {% endif %}
-
 
   </div>
 

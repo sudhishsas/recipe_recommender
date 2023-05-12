@@ -13,7 +13,10 @@ from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.feature_extraction.text import TfidfVectorizer
 from collections import defaultdict
 from gensim.models import Word2Vec
-
+"""
+This file was created to find stop words and create the lists used to parsed the data.
+This file was also used as a testing area for snippets of code used/ not used in the final code.
+"""
 
 
 vocabulary = nltk.FreqDist()
@@ -386,6 +389,15 @@ def addsorteddoctocsv(rec, input):
     file.close()
     print("added to csv successfully")    
     return 0
+
+def changetolist(values):
+    if isinstance(values, list):
+        keysw = values
+        
+    else:
+        keysw = ast.literal_eval(values)
+    return keysw
+
 
 
 def get_recs(ingredients, N=10):
