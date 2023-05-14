@@ -40,6 +40,7 @@ def get_recommendations(N, scores,categories):
         recommendation.at[count, "ingredients"] = df_recipes["RecipeIngredientParts"][i]
         recommendation.at[count, "category"] = df_recipes["Keywords_parsed"][i]
         recommendation.at[count, "recipe_instructions"] = df_recipes["RecipeInstructions"][i]
+        recommendation.at[count, "Images"] = df_recipes["Images"][i]
         recommendation.at[count, "score"] = f"{scores[i]}"
         count += 1
         
@@ -97,6 +98,10 @@ class TfidfEmbeddingVectorizer(object):
         for word in sent:
             if word in self.word_model.wv.index_to_key:
                 mean.append(self.word_model.wv.get_vector(word) * self.word_idf_weight[word])  # idf weighted
+        #print("mean vector of a word", self.word_model.wv.get_vector('peri peri') * self.word_idf_weight['peri peri'])
+        #print("checking the weight of a word",self.word_idf_weight['peri peri'])
+        #print("vector of a word", self.word_model.wv.get_vector('peri peri'))
+        #print("vector of a word", self.word_model.wv.get_vector('sugar'))
 
         if not mean:  # empty words
             # If a text is empty, return a vector of zeros.
@@ -109,6 +114,8 @@ class TfidfEmbeddingVectorizer(object):
             mean = np.array(mean).mean(axis=0)
             #print("mean after",mean)
             return mean
+        
+        
 
     def word_average_list(self, docs):
         """

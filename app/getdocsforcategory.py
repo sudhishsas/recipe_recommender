@@ -25,7 +25,7 @@ def getsortedcategorycsv(rec, input):
         writer = csv.writer(file)
 
         #adds the headings of the csv file
-        writer.writerow(['RecipeId','Name','CookTime','RecipeCategory','Keywords_parsed','RecipeIngredientParts','RecipeInstructions','parsed_categorylist_keywords','ingredients_parsed'])
+        writer.writerow(['RecipeId','Name','CookTime','RecipeCategory','Keywords_parsed','RecipeIngredientParts','RecipeInstructions','parsed_categorylist_keywords','ingredients_parsed','Images'])
         
         #opens the parsed document csv file for reading.
         df_recipes = pd.read_csv(r'C:\xampp\htdocs\3161Database files\recipe_recommender\app\csvfiles\parseddocuments.csv', encoding= 'unicode_escape')
@@ -46,14 +46,14 @@ def getsortedcategorycsv(rec, input):
             ingredientsparsed = df_recipes["ingredients_parsed"][i]
             instructions = df_recipes["RecipeInstructions"][i]
             parsedcatergorylist = df_recipes["parsed_categorylist_keywords"][i]
-
+            Images = df_recipes["Images"][i]
             #checks the categoty list with the current recipe categroy list to see if it has the all the categories beeing sorted by
             
             check = all(u in parsedcatergorylist for u in input)
 
             #checks if the check list is empty or not and adds the data to the file 
             if check: 
-                rows.append([recipeid, name, cooktime, categories, Keyword_parsed, ingredients, instructions, parsedcatergorylist, ingredientsparsed])
+                rows.append([recipeid, name, cooktime, categories, Keyword_parsed, ingredients, instructions, parsedcatergorylist, ingredientsparsed, Images])
 
                 #t = ', '.join(map(lambda x: '"'+ str(x) + '"', rows[0]))
                 #print(type(t))

@@ -301,15 +301,16 @@ def addparsedddoctocsv(rec, input=0):
     
         writer = csv.writer(file)
         #creats the header of the csv file with the rows titles
-        writer.writerow(['RecipeId','Name','CookTime','RecipeCategory','Keywords_parsed','RecipeIngredientParts','RecipeInstructions','parsed_categorylist_keywords','ingredients_parsed'])
+        writer.writerow(['RecipeId','Name','CookTime','RecipeCategory','Keywords_parsed','RecipeIngredientParts','RecipeInstructions','parsed_categorylist_keywords','ingredients_parsed','Images'])
         
         #reads form the csv files that has the data needed to create the new csv
         df_recipes = pd.read_csv(r'C:\xampp\htdocs\3161Database files\recipe_recommender\app\csvfiles\parsed_Categories.csv')
         dff_recipes = pd.read_csv(r'C:\xampp\htdocs\3161Database files\recipe_recommender\app\csvfiles\parsed_ingredients.csv')
-        
+        df_image = pd.read_csv(r'C:\xampp\htdocs\3161Database files\recipe_recommender\app\csvfiles\RecipeImages.csv',encoding= 'unicode_escape',error_bad_lines = False)
         rows = []
         print("started adding the docs to the file")
         #loops the lenght of the origonal csv
+        ct = 0
         for i in range(len(rec)):
             rows.clear()
             recipeid = df_recipes["RecipeId"][i]
@@ -321,9 +322,20 @@ def addparsedddoctocsv(rec, input=0):
             ingredientsparsed = dff_recipes["ingredients_parsed"][i]
             instructions = df_recipes["RecipeInstructions"][i]
             parsedcatergorylist = df_recipes["parsed_categorylist_keywords"][i]
+            if df_image["RecipeId"][i] != df_recipes["RecipeId"][i]:
+                for t in range(ct, len(df_image['RecipeId'])):
+                    if int(df_recipes["RecipeId"][i]) == int(df_image['RecipeId'][t]):
+                        Images = df_image["Images"][t]
+                        ct = t
+                        break
+                    if int(df_image['RecipeId'][t]) > int(df_recipes["RecipeId"][i]):
+                        Images = "character(0)"
+            else:
+                Images = df_image["Images"][i]
 
+             
             #creates a row of data collected for the  id 
-            rows.append([recipeid, name, cooktime, categories, Keywords_parsed, ingredients, instructions, parsedcatergorylist, ingredientsparsed])
+            rows.append([recipeid, name, cooktime, categories, Keywords_parsed, ingredients, instructions, parsedcatergorylist, ingredientsparsed, Images])
             #writes the row of info to the csv file
             writer.writerow(rows[0])
 
@@ -334,7 +346,7 @@ def addparsedddoctocsv(rec, input=0):
 
 #data = pd.read_csv(r'C:\xampp\htdocs\3161Database files\recipe_recommender\app\csvfiles\updated_Categories.csv')
 #tester = addparsedddoctocsv(data["Keywords_parsed"])
-
+#print(tester)
 
 def allergy_checker(ingre):
     #dictionary of alergies and the related foods fo the allergies 

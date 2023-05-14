@@ -100,8 +100,9 @@ def profile():
                     if s in usercpyin:
                         usercpyin.remove(s)
                 newingre = ','.join(ingre + usercpyin)
-                if newingre[0] == ",":
-                    newingre =  newingre[1:]
+                if newingre != '':
+                    if newingre[0] == ",":
+                        newingre =  newingre[1:]
             print("this is ingredients", newingre)
             #gets the categories and creates a list of categories
             category = request.form.getlist('category')
@@ -430,12 +431,13 @@ def viewrecipes(recipeName):
         reccats = recoms['category'].tolist()
         indcheck = recoms['recipe_name'].tolist()
         recinstructs =recoms['recipe_instructions'].tolist()
+        recimages = recoms['Images'].tolist()
         useral = list(getuseringred(user_id).alergies.split(","))
 
         count = 0
         recing = []
         reccat = []
-
+        recimage = ''
         recinstruct = ''
         #check if the recipe name matches and collects the information for that recipe
         for i in indcheck:
@@ -444,6 +446,7 @@ def viewrecipes(recipeName):
                 recing = ast.literal_eval(recings[count])
                 reccat = ast.literal_eval(reccats[count])
                 recinstruct = recinstructs[count]
+                recimage = recimages[count]
             count+=1
         #checks for any of the users allergies relating to the current recipe ingredients
         checkal = allergy_checker(recing)
@@ -454,12 +457,21 @@ def viewrecipes(recipeName):
         if finalal != []:
             flash('This recipe contains foods that you may be allergic to: Allergies ' + ','.join(finalal)  , 'danger')
         
-        
+        print("images", type(recimage))
         i = recinstruct.replace("]", "")
         recinstruct = i.replace("[", "")
         recinstruct= list(recinstruct.split(","))
-
-        return render_template("viewrecipe.html", rname = recipeName, recing = recing, reccat = reccat, recinstruct = recinstruct)
+        print("this is img", recimage)
+        if recimage != 'character(0)':
+            print(recimage)
+            img = recimage.replace('[', '')
+            recimage = img.replace(']', '')
+            recimage = list(recimage.split('",'))
+            img = [i for i in recimage if recimage.count(i) == 1]
+            print(img)
+            recimage = img[0].replace('"', '')
+        
+        return render_template("viewrecipe.html", rname = recipeName, recing = recing, reccat = reccat, recinstruct = recinstruct, recimage = recimage)
     
     
     return redirect(url_for("login"))
