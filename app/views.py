@@ -78,7 +78,7 @@ def profile():
             for x in ingre:
                 if corrector.correction(x) != "i":
                     if corrector.correction(x) == None:
-                        newingre.append(x)
+                        newingre.append(str(correct_spelling(x)))
                     else:
                         newingre.append(corrector.correction(x))
             ingre = newingre.copy()
@@ -336,7 +336,8 @@ def getrecommendation():
             for x in ingre:
                 if corrector.correction(x) != "i":
                     if corrector.correction(x) == None:
-                        newingre.append(x)
+                        #correcting a phrase like "A bunch of bananans"
+                        newingre.append(correct_spelling(x))
                     else:
                         newingre.append(corrector.correction(x))
             ingre = newingre.copy()
@@ -448,28 +449,31 @@ def viewrecipes(recipeName):
                 recinstruct = recinstructs[count]
                 recimage = recimages[count]
             count+=1
+            
         #checks for any of the users allergies relating to the current recipe ingredients
         checkal = allergy_checker(recing)
         finalal = []
         for i in checkal:
+            print("came to this")
             if i in useral:
                 finalal.append(i)
+        print("seen it",finalal)
         if finalal != []:
+            print("thi sis its job")
             flash('This recipe contains foods that you may be allergic to: Allergies ' + ','.join(finalal)  , 'danger')
         
         print("images", type(recimage))
         i = recinstruct.replace("]", "")
         recinstruct = i.replace("[", "")
         recinstruct= list(recinstruct.split(","))
-        print("this is img", recimage)
-        if recimage != 'character(0)':
-            print(recimage)
-            img = recimage.replace('[', '')
-            recimage = img.replace(']', '')
-            recimage = list(recimage.split('",'))
-            img = [i for i in recimage if recimage.count(i) == 1]
-            print(img)
-            recimage = img[0].replace('"', '')
+        
+        if recimage != '"[character(0)]"':
+            img = recimage.replace(']"', "")
+            recimage = img.replace('"[', "")
+            recimage = list(recimage.split(", "))
+            recimage = recimage[0]
+        else:
+            recimage = "../static/noimage.jpg"
         
         return render_template("viewrecipe.html", rname = recipeName, recing = recing, reccat = reccat, recinstruct = recinstruct, recimage = recimage)
     
@@ -502,6 +506,16 @@ def getuseringred(user_id):
 @login_manager.user_loader
 def load_user(id):
     return UserLogin.query.get(int(id))
+
+
+
+def correct_spelling(sentence):
+    
+    sentence = TextBlob(sentence)
+    
+    result = sentence.correct()
+    
+    return result
 
 ###
 # The functions below should be applicable to all Flask apps.

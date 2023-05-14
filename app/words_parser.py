@@ -351,10 +351,10 @@ def addparsedddoctocsv(rec, input=0):
 def allergy_checker(ingre):
     #dictionary of alergies and the related foods fo the allergies 
     common_allergens = {
-    'Milk Allergy': {'Cheese', 'Butter', 'Margarine', 'Yogurt', 'cream', 'Whey', 'cottage', 'Ghee', 'Half and Half', 'Chocolate'},
+    'Milk Allergy': {'Cheese', 'Butter', 'Margarine', 'Yogurt', 'cream', 'Whey', 'cottage', 'Ghee', 'Half and Half', 'Chocolate', 'Milk'},
     'Egg Allergy': {'egg'},
     'Tree Nut Allergy': {'nut', 'Almond', 'Cashew', 'Macadamia', 'Pistachio','Pine','Walnut', 'Pistachio', 'Pecan', 'Hazelnut'},
-    'Peanurt Allergy': {'peanut'},
+    'Peanurt Allergy': {'peanut', 'peanut butter'},
     'ShellFish Allergy': {'Shrimp','Prawn','Crayfish', 'Lobster', 'Squid', 'Scallop', 'Clam', 'Crab', 'Oyster', 'Mussle' },
     'Wheat': {'flour', 'wheat', 'pasta', 'noodle', 'bread', 'crust', 'Bulgur', 'Pasta', 'malt', 'starch', 'Soy' },
     'Soy Allergy': {'soy', 'tofu', 'lecithin'},
@@ -381,7 +381,7 @@ def allergy_checker(ingre):
     #takes a ingredient and checks if it is a valid value in the dictionary and returnes the corresponding key
     def get_key(val):
         for key, value in common_allergens.items():
-            if val in list(value):
+            if val in [word.lower() for word in list(value)]:
                 return key
         return False   
      

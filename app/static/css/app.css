@@ -32,6 +32,21 @@ body {
   border-radius: 3px;
 }
 
+.allergies{
+  -moz-column-count: 5;
+  -moz-column-gap: 10px;
+  -webkit-column-count: 5;
+  -webkit-column-gap: 10px;
+  column-count: 5;
+  column-gap: 10px;
+  text-size-adjust: 70%;
+  line-height: 0.8;
+  background-color: rgb(68, 64, 105);
+  color: #fff;
+  padding: 10px 0;
+  border-radius: 3px;
+}
+
 .catlist{
   -moz-column-count: 5;
   -moz-column-gap: 10px;
@@ -273,4 +288,8 @@ no-js #loader { display: none;  }
   to {
     transform: rotate(1turn);
   }
+}
+
+.lable{
+  font: bold;
 }

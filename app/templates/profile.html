@@ -133,7 +133,7 @@
         <br>
 
           <h6>Current alergies Select to remove</h6>
-
+          <div class = "allergies">
           {% if useral != [] %}
           <ol>
             {% for al in useral %}
@@ -141,6 +141,8 @@
             {% endfor %}
           </ol>
           {% endif %}
+        </div>
+        <br>
         <div class="form-group">
           <div class="tipper"><p style="background: rgb(54, 131, 131); color: aliceblue; padding: 5%; width: max-content;"> Select Allergies</p> 
             <span class="tippertext"><div id="cols">
