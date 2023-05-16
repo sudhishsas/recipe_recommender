@@ -3,6 +3,21 @@ import numpy as np
 import pandas as pd
 import ast
 from nltk.stem import WordNetLemmatizer
+import pandas as pd
+import numpy as np
+import ast
+import unidecode
+
+from sklearn.metrics.pairwise import cosine_similarity
+#from words_parser import ingredient_parser
+from sklearn.feature_extraction.text import TfidfVectorizer
+from collections import defaultdict
+from gensim.models import Word2Vec
+"""
+This file was created to find stop words and create the lists used to parsed the data.
+This file was also used as a testing area for snippets of code used/ not used in the final code.
+"""
+
 
 vocabulary = nltk.FreqDist()
 vocab = nltk.FreqDist.clear
@@ -47,11 +62,43 @@ savory = ['Chicken Breast', 'Soy/Tofu', 'Vegetable', 'Pie', 'Chicken', 'Southwes
             'Wild Game', 'Pheasant', 'Japanese', 'Canadian', 'Salad Dressings', 'Spring', 'Vegan', 'Grains', 'Collard Greens', 'Tilapia', 'Penne', 'Refrigerator', 'Potluck', 'Spicy', 'Moroccan', 'Pressure Cooker', 'Papaya', 'Kid Friendly', 'Korean', 'Whole Turkey', 'Pasta Shells', 'Plums', 'Danish', 'Lebanese', 'Creole', 'Medium Grain Rice', 'Spinach', 'Squid', 'Homeopathy/Remedies', 'Thanksgiving', 'Moose', 'Native American', 'African', 'High Fiber', 'Kosher', 'Norwegian', 'Household Cleaner', 'Ethiopian', 'Polish', 'Belgian', 'Rabbit', 'Swedish', 'Goose', 'Austrian', 'Australian', 'Swiss', 'Pennsylvania Dutch', 'Elk', 'Bear', 'Mahi Mahi', 'Duck Breasts', 'Scottish', 'Quail', 'Tempeh', 'Cuban', 'Turkey Breasts', 
             'Cantonese', 'Peanut Butter', 'Hawaiian', 'Bath/Beauty', 'Szechuan', 'Portuguese', 'Summer Dip', 'Costa Rican', 'Duck', 'Dutch', 'Filipino', 'Welsh', 'Camping', 'Russian', 'St. Patricks Day', 'Pot Pie', 'Polynesian', 'Cherries', 'Egyptian', 'Chard', 'Lime', 'Lemon', 'Kiwifruit', 'Mango', 'No Shell Fish', 'Whitefish', 'Brunch', 'Malaysian', 'Toddler Friendly', 'Octopus', 'Nigerian', 'Mixer', 'Venezuelan', 'Bread Machine', 'South African', 'Finnish', 'No Cook', 'South American', 'Nepalese', 'Palestinian', 'Egg Free', 'Sweet', 'Czech', 'Icelandic', 'Beginner Cook', 'Hunan', 'Halloween', 'Avocado', 'Iraqi', '< 4 Hours', 'Pakistani', 'Chocolate Chip Cookies', 'Canning', 'Stove Top', 'Puerto Rican', 'Ecuadorean', 'Hanukkah', 'Chilean', 'Breakfast Eggs', 'Cambodian', 'Honduran', 'Peruvian', 'Nuts', 'Peanut Butter Pie', 'Deep Fried', 'Ham And Bean Soup', 'Bread Pudding', 'Margarita', 'Bean Soup', 'Turkey Gravy', 'Spaghetti Sauce', 'Freezer', 'Lemon Cake', 'Black Bean Soup', 'Somalian', 'Main Dish Casseroles', 'Pot Roast', 'Potato Soup', 'Broccoli Soup', 'Apple Pie', 'Oatmeal', 'Soups Crock Pot', 'Roast Beef Crock Pot', 'Chicken Crock Pot', 'Breakfast Casseroles', 'Grapes', 'Macaroni And Cheese', 'Mashed Potatoes', 'Desserts Fruit', 'Birthday', 'Pumpkin', 'Ice Cream', 'Artichoke', 'Indian', 'Baking', 'Beef Liver', 'Memorial Day', 'Sudanese', 'Coconut Cream Pie', 'Easy', 'Steam', 'Dehydrator', 'Mongolian', 'Small Appliance' ]
 
+category_words = ['savory', 'easy', '< 60 min', 'meat', 'dessert', '< 4 hour', 'vegetable', '< 30 min', 'healthy', 'low cholesterol', 'inexpensive', 'beginner cook', 'low protein', 'fruit', 'european', 'kid friendly', 'weeknight', 'lunch/snacks', 'for large group', 'one dish meal', '< 15 min', 'brunch', 'bread', 'breakfast', 'asian', 'sweet', 'very low carbs',
+                'chicken breast', 'potluck', 'vegan', 'christmas', 'summer', 'spicy', 'winter', 'high protein', 'mexican', 'quick bread', 'from scratch', 'egg free', 'toddler friendly', 'sauce', 'thanksgiving', 'canadian', 'kosher', 'bar cookie', 'pie', 'lactose free', 'drop cooky', 'beverage', 'stew', 'southwestern u.s.', 'indian', 'citrus', 'yeast bread', 'spring',
+                'australian', 'african', 'chinese', 'candy', 'greek', 'frozen dessert', 'savory pie', 'broil/grill', 'stir fry', 'southwest asia middle east', 'curry', 'tex mex', 'thai', 'german', 'camping', 'caribbean', 'cajun', 'no cook', 'scandinavian', 'deep fried', 'south american', 'canning', 'roast', 'spanish', 'creole', 'japanese', 'moroccan', 'salad dressing', 
+                'baking', 'wild game', 'scottish', 'st. patrick day', 'halloween', 'hanukkah', 'new zealand', 'stock', 'birthday', 'smoothy', 'punch beverage', 'russian', 'hawaiian', 'polish', 'swedish', 'vietnamese', 'portuguese', 'hungarian', 'swiss', 'deer', 'korean', 'pumpkin', 'south african', 'filipino', 'pakistani', 'lebanese', 'turkish', 'cuban', 'ramadan', 'chutney', 
+                'danish', 'dutch', 'indonesian', 'jelly', 'no shell fish', 'pennsylvania dutch', 'brazilian', 'norwegian', 'native american', 'austrian', 'shake', 'cantonese', 'belgian', 'dairy free food', 'egyptian', 'manicotti', 'czech', 'ice cream', 'polynesian', 'malaysian', 'finnish', 'southwest asia (middle east)', 'sourdough bread', 'peruvian', 'high fiber', 'puerto rican',
+                'colombian', 'iraqi', 'labor day', 'bath/beauty', 'ethiopian', 'memorial day', 'tempeh', 'palestinian', 'chilean', 'nepalese', 'dehydrator', 'cambodian', 'homeopathy/remedies', 'icelandic', 'venezuelan', 'ecuadorean', 'hunan', 'college food', 'nigerian', 'costa rican', 'chinese new year', 
+                'guatemalan', 'mongolian', 'georgian', 'honduran', 'somalian', 'sudanese']
+
+time_words = ['< 60 min', '< 4 hour', '< 30 min', '< 15 min' ]
+other_stop_words = ['high in...', 'bread machine', 'small appliance', 'yam/sweet potato', 'potato', 'onion', 'lemon', 
+                    'pork', 'whole chicken', 'chicken', 'poultry', 'lamb/sheep', 'green', 'pineapple', 'tropical fruit', 'duck', 'raspberry', 'berry', 'apple', 'pear', 'pepper', 'long grain rice', 'black bean', 'bean', 'refrigerator', 'microwave', 'chicken thigh & leg', 
+                    'freezer', 'oven', 'stove top', 'free of...', 'gelatin', 'goose', 'grain', 'grape', 'gumbo', 'halibut', 'ham', 'lentil', 'lime', 'liver', 'lobster', 'cheese', 'meatball', 'meatloaf', 'medium grain rice', 'melon', 'mixer', 'moose', 'chicken brest',
+                    'mussel', 'nut', 'orange', 'orange roughy', 'oyster', 'papaya', 'pasta shell', 'peanut butter', 'penne', 'perch', 'pheasant', 'plum', 'pressure cooker', 'quail', 'rabbit', 'rice', 'roast beef', 'scone', 'short grain rice', 'soy/tofu', 'steak',
+                    'spaghetti', 'spinach', 'spread', 'squid', 'strawberry', 'tart', 'thigh & leg', 'tilapia', 'trout', 'tuna', 'turkey breast', 'welsh', 'white rice', 'whitefish', 'whole', 'whole turkey', 'yam/sweetbass', 'bear', 'beef liver', 'beef organ meat', 
+                    'breast', 'brown rice', 'catfish', 'cauliflower', 'cheesecake', 'cherry', 'chocolate chip cooky', 'chowder', 'clear soup', 'coconut', 'crab', 'crawfish', 'cookie & brownie', 'corn', 'beef kidney', 'pasta elbow', 'halloween cocktail', 'pot roast', 
+                    'breakfast egg', 'bean soup', 'egg breakfast', 'spaghetti sauce', 'crock pot slow cooker', 'turkey gravy', 'cabbage', 'lemon cake', 'chicken stew', 'marinara sauce', 'summer dip', 'peanut butter pie', 'served hot new year', 'ham and bean soup', 'bread pudding', 
+                    'margarita', 'beef sauce', 'for large group holiday/event', 'navy bean soup', 'cranberry sauce', 'pork loin', 'baked bean', 'black bean soup', 'cucumber', 'main dish casserole', 'potato soup', 'beef crock pot', 'broccoli soup', 'apple pie', 'soup crock pot', 'roast beef crock pot', 
+                    'tomato sauce', 'chicken crock pot', 'beef sandwich', 'breakfast potato', 'breakfast casserole', 'strawberry dessert', 'dessert easy', 'dessert fruit', 'coconut dessert', 'coconut cream pie', 'pork crock pot', 'high in... diabetic friendly', 'octopus', 'household cleaner', 'elk', 
+                    'pot pie', 'bass', 'artichoke', 'kiwifruit', 'duck breast', 'whole duck', 'mahi mahi', 'oatmeal', 'avocado', 'chicken liver', 'reynolds wrap contest', 'chard', 'macaroni and cheese', 'szechuan', 'collard green', 'mashed potato', 'veal', 'mango', 'steam']
 lemmatizer = WordNetLemmatizer()
-words_to_remove = [lemmatizer.lemmatize(m) for m in cultur_no_words]
-print(words_to_remove)
+txy = []
+tyt=[]
+for i in category_words:
+    if i in country_list or i in time_words:
+        txy.append(i)
+    else:
+        tyt.append(i)
+print("new country list",tyt)
+
+#other_stop_words = [word.lower() for word in other_stop_words]
+#other_stop_words =  list(dict.fromkeys(other_stop_words))
+#print("this is otherstop words",other_stop_words)
+
+#words_to_remove = [lemmatizer.lemmatize(m) for m in cultur_no_words]
+#print(words_to_remove)
 #corpus = data.Keywords.apply(get_and_sort_corpus)
-test =[]
+#test =[]
 
 #ct =[x.lower() for x in categroy_no_words]
 #cultur_no_words = [x.lower() for x in cultur_no_words]
@@ -114,6 +161,29 @@ test =[]
 #print("words list",wors_list)
 
 
+
+#recipe_df = pd.read_csv(r'app\csvfiles\parseddocuments.csv')
+
+#vocabulary = nltk.FreqDist()
+#for ingredients in recipe_df['ingredients_parsed']:
+    #print("see if its a list",ast.literal_eval(ingredients) ,  type(ast.literal_eval(ingredients)))
+#    ingredients = ast.literal_eval(ingredients)
+#    vocabulary.update(ingredients)
+#wdlist= []
+#for word, frequency in vocabulary.most_common(len(vocabulary)):
+    #print(f'{word};{frequency}')
+#    wdlist.append([word, frequency])
+#print(wdlist)
+#fdist = nltk.FreqDist(ingredients)
+
+#common_words = []
+#for word, _ in vocabulary.most_common(len(vocabulary)):
+#    common_words.append(word)
+#print("common words:",common_words)
+
+
+
+
 #import re
 #steps = data.RecipeInstructions.values
 #for i in steps:
@@ -124,3 +194,257 @@ test =[]
 #    i = i.split(",")
     #i= re.findall('[A-Z][^A-Z]*', i)
 #    print((i))
+
+def get_recommendations(N, scores):
+    """
+    Top-N recomendations order by score
+    """
+    df_recipes = pd.read_csv(r'C:\xampp\htdocs\3161Database files\recipe_recommender\app\csvfiles\parseddocuments.csv')
+    
+    # order the scores with and filter to get the highest N scores
+    S = len(scores)
+    top = sorted(range(S), key=lambda x: scores[x], reverse=True)[:S]
+    # create dataframe to load in recommendations
+    recommendation = pd.DataFrame(columns=["recipe_name", "ingredients", "category", "recipe_instructions","score"])
+    count = 0
+    for i in top:
+        recommendation.at[count, "recipe_name"] = df_recipes["Name"][i]
+        recommendation.at[count, "ingredients"] = df_recipes["RecipeIngredientParts"][i]
+        recommendation.at[count, "category"] = df_recipes["Keywords_parsed"][i]
+        recommendation.at[count, "recipe_instructions"] = df_recipes["RecipeInstructions"][i]
+        recommendation.at[count, "score"] = f"{scores[i]}"
+        count += 1
+    print(len(top))
+    #return recommendation
+    return top
+
+class MeanEmbeddingVectorizer(object):
+    def __init__(self, word_model):
+        self.word_model = word_model
+        self.vector_size = word_model.wv.vector_size
+
+    def fit(self):  # comply with scikit-learn transformer requirement
+        return self
+
+    def transform(self, docs):  # comply with scikit-learn transformer requirement
+        doc_word_vector = self.word_average_list(docs)
+        return doc_word_vector
+
+    def word_average(self, sent):
+        """
+		Compute average word vector for a single doc/sentence.
+		:param sent: list of sentence tokens
+		:return:
+			mean: float of averaging word vectors
+		"""
+        mean = []
+        for word in sent:
+            if word in self.word_model.wv.index_to_key:
+                mean.append(self.word_model.wv.get_vector(word))
+
+        if not mean:  # empty words
+            # If a text is empty, return a vector of zeros.
+            # logging.warning(
+            #     "cannot compute average owing to no vector for {}".format(sent)
+            # )
+            return np.zeros(self.vector_size)
+        else:
+            mean = np.array(mean).mean(axis=0)
+            return mean
+
+    def word_average_list(self, docs):
+        """
+		Compute average word vector for multiple docs, where docs had been tokenized.
+		:param docs: list of sentence in list of separated tokens
+		:return:
+			array of average word vector in shape (len(docs),)
+		"""
+        return np.vstack([self.word_average(sent) for sent in docs])
+    
+class TfidfEmbeddingVectorizer(object):
+    def __init__(self, word_model):
+
+        self.word_model = word_model
+        self.word_idf_weight = None
+        self.vector_size = word_model.wv.vector_size
+
+    def fit(self, docs):  # comply with scikit-learn transformer requirement
+        """
+		Fit in a list of docs, which had been preprocessed and tokenized,
+		such as word bi-grammed, stop-words removed, lemmatized, part of speech filtered.
+		Then build up a tfidf model to compute each word's idf as its weight.
+		Noted that tf weight is already involved when constructing average word vectors, and thus omitted.
+		:param
+			pre_processed_docs: list of docs, which are tokenized
+		:return:
+			self
+		"""
+
+        text_docs = []
+        for doc in docs:
+            text_docs.append(" ".join(doc))
+
+        tfidf = TfidfVectorizer()
+        tfidf.fit(text_docs)  # must be list of text string
+
+        # if a word was never seen - it must be at least as infrequent
+        # as any of the known words - so the default idf is the max of
+        # known idf's
+        max_idf = max(tfidf.idf_)  # used as default value for defaultdict
+        self.word_idf_weight = defaultdict(
+            lambda: max_idf,
+            [(word, tfidf.idf_[i]) for word, i in tfidf.vocabulary_.items()],
+        )
+        return self
+
+    def transform(self, docs):  # comply with scikit-learn transformer requirement
+        doc_word_vector = self.word_average_list(docs)
+        return doc_word_vector
+
+    def word_average(self, sent):
+        """
+		Compute average word vector for a single doc/sentence.
+		:param sent: list of sentence tokens
+		:return:
+			mean: float of averaging word vectors
+		"""
+
+        mean = []
+        for word in sent:
+            if word in self.word_model.wv.index_to_key:
+                mean.append(self.word_model.wv.get_vector(word) * self.word_idf_weight[word])  # idf weighted
+
+        if not mean:  # empty words
+            # If a text is empty, return a vector of zeros.
+            # logging.warning(
+            #     "cannot compute average owing to no vector for {}".format(sent)
+            # )
+            return np.zeros(self.vector_size)
+        else:
+            mean = np.array(mean).mean(axis=0)
+            return mean
+
+    def word_average_list(self, docs):
+        """
+		Compute average word vector for multiple docs, where docs had been tokenized.
+		:param docs: list of sentence in list of separated tokens
+		:return:
+			array of average word vector in shape (len(docs),)
+		"""
+        return np.vstack([self.word_average(sent) for sent in docs])
+    
+def get_and_sort_corpus(data):
+    """
+    Get corpus with the documents sorted in alphabetical order
+    """
+    sorted = []
+    for doc in data.parsed_categorylist_keywords.values:
+        doc = ast.literal_eval(doc)
+        doc.sort()
+        sorted.append(doc)
+    return sorted
+
+def addsorteddoctocsv(rec, input):
+    
+    with open(r'app\csvfiles\recipesbycategory.csv', 'w',encoding='UTF8', newline='') as file:
+        
+        writer = csv.writer(file)
+
+        writer.writerow(['RecipeId','Name','CookTime','RecipeCategory','Keywords_parsed','RecipeIngredientParts','RecipeInstructions','parsed_categorylist_keywords','ingredients_parsed'])
+        
+        df_recipes = pd.read_csv(r'C:\xampp\htdocs\3161Database files\recipe_recommender\app\csvfiles\parseddocuments.csv')
+        
+        
+        count = 0
+        rows = []
+        print("started adding the docs to the file")
+        print(len(rec))
+        for i in rec:
+            
+            rows.clear()
+            #t= ""
+            recipeid = df_recipes["RecipeId"][i]
+            name = df_recipes["Name"][i]
+            cooktime = df_recipes["CookTime"][i]
+            categories = df_recipes["RecipeCategory"][i]
+            Keywords_parsed = df_recipes["Keywords_parsed"][i]
+            ingredients = df_recipes["RecipeIngredientParts"][i]
+            ingredientsparsed = df_recipes["ingredients_parsed"][i]
+            instructions = df_recipes["RecipeInstructions"][i]
+            parsedcatergorylist = df_recipes["parsed_categorylist_keywords"][i]
+            count += 1
+
+            check = all(u in parsedcatergorylist for u in input)
+
+            if check: 
+                rows.append([recipeid, name, cooktime, categories, Keywords_parsed, ingredients, instructions, parsedcatergorylist, ingredientsparsed])
+
+                #t = ', '.join(map(lambda x: '"'+ str(x) + '"', rows[0]))
+
+                writer.writerow(rows[0])
+            else:
+                continue
+            
+
+    file.close()
+    print("added to csv successfully")    
+    return 0
+
+def changetolist(values):
+    if isinstance(values, list):
+        keysw = values
+        
+    else:
+        keysw = ast.literal_eval(values)
+    return keysw
+
+
+
+def get_recs(ingredients, N=10):
+    # loading in the ingredients word2vec model 
+    model = Word2Vec.load("app\models\model_cbow_categorykeywords.bin")
+    model.init_sims(replace=True)
+    #check if modle is there
+    if model:
+        print("Successfully loaded model :)")
+    # load in data
+    data  = pd.read_csv(r"app\csvfiles\parsed_Categories.csv")
+    
+    # create corpus
+    corpus = get_and_sort_corpus(data)
+
+    # get average embdeddings for each document
+    mean_vec_tr = MeanEmbeddingVectorizer(model)
+    doc_vec = mean_vec_tr.transform(corpus)
+    doc_vec = [doc.reshape(1, -1) for doc in doc_vec]
+    assert len(doc_vec) == len(corpus)
+    
+    
+    # use TF-IDF as weights for each word embedding
+    #tfidf_vec_tr = TfidfEmbeddingVectorizer(model)
+    #tfidf_vec_tr.fit(corpus)
+    #doc_vec = tfidf_vec_tr.transform(corpus)
+    #doc_vec = [doc.reshape(1, -1) for doc in doc_vec]
+    #assert len(doc_vec) == len(corpus)
+
+    # create embessing for input text
+    input = ingredients
+    # create tokens with elements
+    input = input.split(",")
+    # parse ingredient list
+    input = category_parser(input)
+    print("This is is the input : ", input)
+    
+    # get embeddings for ingredient doc
+    #input_embedding = tfidf_vec_tr.transform([input])[0].reshape(1, -1)
+    input_embedding = mean_vec_tr.transform([input])[0].reshape(1, -1)
+    # get cosine similarity between input embedding and all the document embeddings
+    cos_sim = map(lambda x: cosine_similarity(input_embedding, x)[0][0], doc_vec)
+    scores = list(cos_sim)
+    
+    # Filter top N recommendations
+    recommendations = get_recommendations(N, scores)
+    addsorteddoctocsv(recommendations, input)
+
+    return recommendations   
+ 

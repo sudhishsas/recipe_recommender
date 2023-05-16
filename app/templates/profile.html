@@ -1,0 +1,163 @@
+{% extends "base.html" %}
+{% block main %}
+<form method="Post">
+
+<h1 align="center">Profile</h1>
+    <form class="form-inline" action="{{ url_for('profile') }}" method="POST">
+        {{ form.csrf_token }}
+        {% include 'flash_messages.html' %}
+        <div>
+          <div class="profile">
+            <div class="d-flex flex-column align-items-center"><img class="rounded-circle mt-2" width="150px" src="https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg"><span class="font-weight-bold"> {{username}} </span><span class="text-black-50"> {{email}} </span><span> </span></div>
+          </div>
+          
+          <div class="form-group">
+            <br>
+                <h6>Your current ingredients Select to remove</h6>
+            {% if useringre != [] %}
+            <div class = "ingrelist">
+              <ol>
+                {% for ingre in useringre %}
+                  <li> <input type="checkbox" name = "ingredient" value= "{{ ingre }}"/>&nbsp; {{ ingre }} </li>
+                {% endfor %}
+              </ol>
+            </div>
+            {% endif %}
+            <br>
+            {{ form.ingredients.label }}
+            {{ form.ingredients(class='form-control', placeholder="Enter any extra ingredients you may have that you would like to use") }}
+          </div>
+          <br>
+          <hr>
+          <h6>Current favouret categories Select to remove</h6>
+
+          {% if user_cat != [] %}
+          <div class = "catlist">
+            <ol>
+              {% for cat in user_cat %}
+                <li> <input type="checkbox" name = "category" value= "{{ cat }}"/>&nbsp; {{ cat }}</li>
+              {% endfor %}
+            </ol>
+          </div>
+          
+          {% endif %}
+          <hr>
+          <br>
+          <h6>Categories</h6>
+          
+          <div class = Category>
+            <ol>
+              <li>
+                <div class="tipper">Preperation Type 
+                  <span class="tippertext"><div id="cols">
+                    <div class="categorielist">
+                      {{ form.preptype.label(class_="form-label") }}
+                      {{ form.preptype(class_="list-group") }}
+                    </div>
+                </div></span>
+                </div>
+              </li>
+
+              <li>
+                <div class="tipper">Time to Cook 
+                  <span class="tippertext"><div id="cols">
+                    <div class="categorielist">
+                      {{ form.time.label(class_="form-label") }}
+                      {{ form.time(class_="list-group") }}
+                    </div>
+                </div></span>
+                </div>
+              </li>
+
+              <li>
+                <div class="tipper">Difficulty 
+                  <span class="tippertext"><div id="cols">
+                    <div class="categorielist">
+                      {{ form.diff.label(class_="form-label") }}
+                      {{ form.diff(class_="list-group") }}
+                    </div>
+                </div></span>
+                </div>
+              </li>
+
+              <li>
+                <div class="tipper">Food Type 
+                  <span class="tippertext"><div id="cols">
+                    <div class="categorielist">
+                      {{ form.fotype.label(class_="form-label") }}
+                      {{ form.fotype(class_="list-group") }}
+                    </div>
+                </div></span>
+                </div>
+              </li>
+
+              <li>
+                <div class="tipper">Event Type 
+                  <span class="tippertext"><div id="cols">
+                    <div class="categorielist">
+                      {{ form.events.label(class_="form-label") }}
+                      {{ form.events(class_="list-group") }}
+                    </div>
+                </div></span>
+                </div>
+              </li>
+
+              <li>
+                <div class="tipper">Seasonal  
+                  <span class="tippertext"><div id="cols">
+                    <div class="categorielist">
+                      {{ form.seas.label(class_="form-label") }}
+                      {{ form.seas(class_="list-group") }}
+                    </div>
+                </div></span>
+                </div>
+              </li>
+
+              <li>
+                <div class="tipper">Misc 
+                  <span class="tippertext"><div id="cols">
+                    <div class="categorielist">
+                      {{ form.misc.label(class_="form-label") }}
+                      {{ form.misc(class_="list-group") }}
+                    </div>
+                </div></span>
+                </div>
+              </li>
+
+            </ol>
+            
+          </div>
+ 
+        </div>
+        <hr>
+        <br>
+
+          <h6>Current alergies Select to remove</h6>
+          <div class = "allergies">
+          {% if useral != [] %}
+          <ol>
+            {% for al in useral %}
+              <li> <input type="checkbox" name = "alergy" value= "{{ al }}"/>&nbsp; {{ al }}</li>
+            {% endfor %}
+          </ol>
+          {% endif %}
+        </div>
+        <br>
+        <div class="form-group">
+          <div class="tipper"><p style="background: rgb(54, 131, 131); color: aliceblue; padding: 5%; width: max-content;"> Select Allergies</p> 
+            <span class="tippertext"><div id="cols">
+              <div class="categorielist">
+                {{ form.alergies.label(class_="form-label") }}
+                {{ form.alergies(class_="list-group") }}
+              </div>
+          </div></span>
+          </div>
+        </div>
+  
+        <br>
+        <button type="submit" name="submit" class="btn btn-primary btn-block">Update Profile</button>
+      </form>
+    </div>
+{% endblock %}
+
+

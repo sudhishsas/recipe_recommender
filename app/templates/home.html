@@ -1,7 +1,32 @@
 {% extends "base.html" %}
-
 {% block main %}
-<h1 class="page-header">Lab 5 Starter Code</h1>
-<p class="lead">Use this starter template for Lab 5<br/>
-All you get are these files and mostly barebones HTML/CSS files.</p>
+<form method="Post">
+
+<h1 align="center">HOME</h1>
+    <hr>
+    <br>
+    <h4>WELCOME BACK {{ username }}</h4>
+    <hr>
+    <br>
+    {% if rnames != [] %}
+    <br>
+
+    
+    <hr>
+    <br>
+    <div>
+      <h6>Your Previous List of Recommendations</h6>
+          
+          <div class = "recommendlist">
+            <ol>
+              {% for rname in rnames %}
+                <li> <a href="/viewrecipe/{{ rname }}">{{ rname }}</a> </li>
+              {% endfor %}
+            </ol>
+          </div>
+          
+          
+    </div>
+    {% endif %}
+
 {% endblock %}

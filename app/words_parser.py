@@ -12,7 +12,7 @@ import csv
 from nltk.stem import WordNetLemmatizer
 from nltk.corpus import wordnet
 from collections import Counter
-import config
+#import app.config
 
 
 
@@ -42,7 +42,7 @@ def ingredient_parser(ingreds):
         "c","pint","p","pt","fl pt","quart","q","qt","fl qt","gallon","g","gal","ml","milliliter","millilitre","cc",
         "mL","l", "liter","litre","L","dl","deciliter","decilitre","dL","bulb","level","heaped","rounded","whole","pinch","medium","slice","pound","lb","#","ounce","oz","mg","milligram","milligramme",
         "g","gram","gramme","kg","kilogram","kilogramme","x","of","mm","millimetre","millimeter","cm",
-        "centimeter","centimetre","m","meter","metre","inch","in","milli","centi","deci","hecto","kilo"]
+        "centimeter","centimetre","m","meter","metre","inch","in","milli","centi","deci","hecto","kilo", "hand", "hand full"]
     
     words_to_remove = ["fresh", "minced", "chopped" "oil", "a", "red", "bunch", "and", "or", "leaf","large", "extra", "sprig", "ground", "handful","free", "small", "pepper", "virgin", "range", "from", "dried","sustainable","black","peeled", "higher", "welfare", "seed", "for","finely", "freshly","sea",
         "quality","white", "ripe", "few", "piece", "source", "to", "organic","flat", "smoked", "sliced", "green", "picked", "the", "stick","plain", "plus","mixed", "bay", "your", "cumin", "optional", "fennel", "serve", "mustard", "unsalted", "baby", "paprika", "fat", "ask", "natural","skin", "roughly", "into", "such", "cut", "good","brown",
@@ -57,13 +57,12 @@ def ingredient_parser(ingreds):
     
     
     # The ingredient list is now a string so we need to turn it back into a list. We use ast.literal_eval
-    #print("checkign list:",ingreds)
-    #print("haksd",type(ingreds))
     
     if isinstance(ingreds, list):
         ingredients = ingreds
         
     else:
+        #turns a numpy string to a list 
         ingredients = ast.literal_eval(ingreds)
     # We first get rid of all the punctuation. We make use of str.maketrans. It takes three input
     # arguments 'x', 'y', 'z'. 'x' and 'y' must be equal-length strings and characters in 'x'
@@ -71,6 +70,7 @@ def ingredient_parser(ingreds):
     #  in the string is mapped to None.
     
     translator = str.maketrans("", "", string.punctuation)
+    #turns the word to its singular form.
     lemmatizer = WordNetLemmatizer()
     ingred_list = []
 
@@ -83,9 +83,7 @@ def ingredient_parser(ingreds):
         # Turn everything to lowercase
         items = [word.lower() for word in items]
         # remove accents
-        items = [
-            unidecode.unidecode(word) for word in items
-        ]  #''.join((c for c in unicodedata.normalize('NFD', items) if unicodedata.category(c) != 'Mn'))
+        items = [unidecode.unidecode(word) for word in items]  
         # Lemmatize words so we can compare words to measuring words
         items = [lemmatizer.lemmatize(word) for word in items]
         # Gets rid of measuring words/phrases, e.g. heaped teaspoon
@@ -97,7 +95,8 @@ def ingredient_parser(ingreds):
     # ingred_list = " ".join(ingred_list)
     return ingred_list
 
-
+#input = "kiwi,bunch of bananas,grapes,raspberries,black berries,1 gallon of milk,peanutbutter"
+#print(ingredient_parser(input.split(",")))
 #data = pd.read_csv('app\parsed_recipesv4.csv')
 #test = ingredient_parser(data.RecipeIngredientParts.apply(ingredient_parser))
 #for tes in test:
@@ -162,9 +161,16 @@ def category_parser(category):
                             'palestinian', 'el', 'netherlander', 'romanian', 'croatianscroats', 'caymanian', 'vincent', 'korean', 'myanma', 'sahrawian', 'italian', 'georgian', 'micronesia', 'cuba', 'bangladeshi', 'laoslaotians', 'slovene', 'cameroon', 'namibian', 'kongese', 'russia', 'bermudian', 'mariana', 'bouvet', 'kyrgyzkirgiz', 'singaporean', 'lettish', 'romanian', 'yemeni', 'malagasy', 'island', 'russian', 'britain', 'palauan', 'comoran', 'kong', 'mahoran', 'jerseymen', 'taiwan', 'manx', 'i-kiribati', 'basotho', 'macanese', 'syrian', 'herzegovina', 'honduran', 'caledonia', 'scottish', 'zimbabwe', 'nepal', 'uganda', 'leonean', 'bahraini', 'uruguayan', 'marshallese', 'bosnians', 'morocco', 'jerseywomen', 'vanuatuan', 'guamanians', 'uruguay', 'vietnam', 'faroe', 'dominican', 'sammarinese', 'guinea', 'argentine', 'barbados', 'lao', 'dominica', 'antiguan', 'chad', 'peruvian', 'nigeria', 'aland', 'belgian', 'moldovan', 'norwegian', 'australia', 'sahrawi', 'mauritian', 'micronesians', 'lucian', 'cypriot', 'motswana', 'maarteners', 'kazakhstani', 'canadian', 'north', 'emirate', 'uzbek', 'marshall', 'island', 'lucians', 
                             'ossetians', 'ecuadorian', 'herzegovinian', 'southwestern', 'saharan', 'swazi', 'trinidad', 'azeri', 'san', 'malinese', 'peru', 'belarusian', 'german', 'montenegro', 'zimbabwean', 'danish', 'maldivian', 'miquelonnais', 'brazilian', 'cajun', 'egyptian', 'zambian', 'mali', 'bhutan', 'iranian', 'guyanese', 'bissau-guineans', 'burundian']
     
-    other_stop_words = ['high in...', 'bread machine', 'small appliance', 'yam/sweet potato', 'potato', 'onion', 'lemon', 'pork', 'whole chicken', 'chicken', 'poultry', 'lamb/sheep', 'green', 'pineapple', 'tropical fruit', 'potato', 'duck', 'raspberry', 'berry', 'apple', 'pear', 'pepper', 'long grain rice', 'black bean', 'bean', 'refrigerator', 'microwave', 'freezer', 'oven', 'stove top', 'free of...', 'gelatin', 'goose', 'grain', 'grape', 'gumbo', 'halibut', 'ham', 'lentil', 'lime', 'liver', 'lobster', 'long grain rice', 'cheese',
-                        'meatball', 'meatloaf', 'medium grain rice', 'melon', 'mixer', 'moose', 'mussel', 'nut', 'orange', 'orange roughy', 'oyster', 'papaya', 'pasta shell', 'peanut butter', 'penne', 'perch', 'pheasant', 'plum', 'pressure cooker', 'quail', 'rabbit', 'rice', 'roast beef', 'scone', 'short grain rice', 'small appliance', 'soy/tofu', 'spaghetti', 'spinach', 'spread', 'squid', 'strawberry', 'tart', 'thigh & leg', 'tilapia', 'trout', 'tuna', 'turkey breast', 'welsh', 'white rice', 'whitefish', 'whole', 'whole turkey', 'yam/sweet'
-                        'bass', 'bear', 'beef liver', 'beef organ meat', 'breast', 'brown rice', 'catfish', 'cauliflower', 'cheese', 'cheesecake', 'cherry', 'chocolate chip cooky', 'chowder', 'clear soup', 'coconut', 'crab', 'crawfish', 'cookie & brownie',  'corn']
+    other_stop_words = ['high in...', 'bread machine', 'small appliance', 'yam/sweet potato', 'potato', 'onion', 'lemon', 
+                    'pork', 'whole chicken', 'chicken', 'poultry', 'lamb/sheep', 'green', 'pineapple', 'tropical fruit', 'duck', 'raspberry', 'berry', 'apple', 'pear', 'pepper', 'long grain rice', 'black bean', 'bean', 'refrigerator', 'microwave', 'chicken thigh & leg', 
+                    'freezer', 'oven', 'stove top', 'free of...', 'gelatin', 'goose', 'grain', 'grape', 'gumbo', 'halibut', 'ham', 'lentil', 'lime', 'liver', 'lobster', 'cheese', 'meatball', 'meatloaf', 'medium grain rice', 'melon', 'mixer', 'moose', 'chicken brest',
+                    'mussel', 'nut', 'orange', 'orange roughy', 'oyster', 'papaya', 'pasta shell', 'peanut butter', 'penne', 'perch', 'pheasant', 'plum', 'pressure cooker', 'quail', 'rabbit', 'rice', 'roast beef', 'scone', 'short grain rice', 'soy/tofu', 'steak',
+                    'spaghetti', 'spinach', 'spread', 'squid', 'strawberry', 'tart', 'thigh & leg', 'tilapia', 'trout', 'tuna', 'turkey breast', 'welsh', 'white rice', 'whitefish', 'whole', 'whole turkey', 'yam/sweetbass', 'bear', 'beef liver', 'beef organ meat', 
+                    'breast', 'brown rice', 'catfish', 'cauliflower', 'cheesecake', 'cherry', 'chocolate chip cooky', 'chowder', 'clear soup', 'coconut', 'crab', 'crawfish', 'cookie & brownie', 'corn', 'beef kidney', 'pasta elbow', 'halloween cocktail', 'pot roast', 
+                    'breakfast egg', 'bean soup', 'egg breakfast', 'spaghetti sauce', 'crock pot slow cooker', 'turkey gravy', 'cabbage', 'lemon cake', 'chicken stew', 'marinara sauce', 'summer dip', 'peanut butter pie', 'served hot new year', 'ham and bean soup', 'bread pudding', 
+                    'margarita', 'beef sauce', 'for large group holiday/event', 'navy bean soup', 'cranberry sauce', 'pork loin', 'baked bean', 'black bean soup', 'cucumber', 'main dish casserole', 'potato soup', 'beef crock pot', 'broccoli soup', 'apple pie', 'soup crock pot', 'roast beef crock pot', 
+                    'tomato sauce', 'chicken crock pot', 'beef sandwich', 'breakfast potato', 'breakfast casserole', 'strawberry dessert', 'dessert easy', 'dessert fruit', 'coconut dessert', 'coconut cream pie', 'pork crock pot', 'high in... diabetic friendly', 'octopus', 'household cleaner', 'elk', 
+                    'pot pie', 'bass', 'artichoke', 'kiwifruit', 'duck breast', 'whole duck', 'mahi mahi', 'oatmeal', 'avocado', 'chicken liver', 'reynolds wrap contest', 'chard', 'macaroni and cheese', 'szechuan', 'collard green', 'mashed potato', 'veal', 'mango', 'steam']
     
     #check if the category passed is a list or not
     if isinstance(category, list):
@@ -189,10 +195,7 @@ def category_parser(category):
         items = [unidecode.unidecode(word) for word in items]
         # Lemmatize words so we can compare words to measuring words
         items = [lemmatizer.lemmatize(word) for word in items]
-        # Gets rid of measuring words/phrases, e.g. heaped teaspoon
-        #items = [word for word in items if word not in other_stop_words]
-        # Get rid of common easy words
-        #items = [word for word in items if word not in category_no_words]
+        
         
         if items:
             category_words.append(" ".join(items))
@@ -228,7 +231,7 @@ def category_fixer(keywords):
     
     x = 0
     addedcategory = []
-     
+    data = pd.read_csv('app\parsed_recipesv4.csv') 
     for i in keywords:
         #check for desserts and make sure keywords has dessert in it.
         checkwords = ast.literal_eval(data['Keywords'][x])
@@ -293,19 +296,22 @@ def category_fixer(keywords):
 
 
 def addparsedddoctocsv(rec, input=0):
-    
+    #opens the csv file for writing 
     with open('app\csvfiles\parseddocuments.csv', 'w', encoding='UTF8', newline='') as file:
     
         writer = csv.writer(file)
-
-        writer.writerow(['RecipeId','Name','CookTime','RecipeCategory','Keywords_parsed','RecipeIngredientParts','RecipeInstructions','parsed_categorylist_keywords','ingredients_parsed'])
+        #creats the header of the csv file with the rows titles
+        writer.writerow(['RecipeId','Name','CookTime','RecipeCategory','Keywords_parsed','RecipeIngredientParts','RecipeInstructions','parsed_categorylist_keywords','ingredients_parsed','Images'])
         
+        #reads form the csv files that has the data needed to create the new csv
         df_recipes = pd.read_csv(r'C:\xampp\htdocs\3161Database files\recipe_recommender\app\csvfiles\parsed_Categories.csv')
         dff_recipes = pd.read_csv(r'C:\xampp\htdocs\3161Database files\recipe_recommender\app\csvfiles\parsed_ingredients.csv')
-        
+        df_image = pd.read_csv(r'C:\xampp\htdocs\3161Database files\recipe_recommender\app\csvfiles\RecipeImages.csv',encoding= 'unicode_escape',error_bad_lines = False)
         rows = []
         print("started adding the docs to the file")
-        for i in len(rec):
+        #loops the lenght of the origonal csv
+        ct = 0
+        for i in range(len(rec)):
             rows.clear()
             recipeid = df_recipes["RecipeId"][i]
             name = df_recipes["Name"][i]
@@ -316,14 +322,21 @@ def addparsedddoctocsv(rec, input=0):
             ingredientsparsed = dff_recipes["ingredients_parsed"][i]
             instructions = df_recipes["RecipeInstructions"][i]
             parsedcatergorylist = df_recipes["parsed_categorylist_keywords"][i]
+            if df_image["RecipeId"][i] != df_recipes["RecipeId"][i]:
+                for t in range(ct, len(df_image['RecipeId'])):
+                    if int(df_recipes["RecipeId"][i]) == int(df_image['RecipeId'][t]):
+                        Images = df_image["Images"][t]
+                        ct = t
+                        break
+                    if int(df_image['RecipeId'][t]) > int(df_recipes["RecipeId"][i]):
+                        Images = "character(0)"
+            else:
+                Images = df_image["Images"][i]
 
-            #check = all(u in parsed_catergoywords for u in input)
-
-            
-            rows.append([recipeid, name, cooktime, categories, Keywords_parsed, ingredients, instructions, parsedcatergorylist, ingredientsparsed])
-
-            #t = ', '.join(map(lambda x: '"'+ str(x) + '"', rows[0]))
-            
+             
+            #creates a row of data collected for the  id 
+            rows.append([recipeid, name, cooktime, categories, Keywords_parsed, ingredients, instructions, parsedcatergorylist, ingredientsparsed, Images])
+            #writes the row of info to the csv file
             writer.writerow(rows[0])
 
     file.close()
@@ -332,4 +345,50 @@ def addparsedddoctocsv(rec, input=0):
 
 
 #data = pd.read_csv(r'C:\xampp\htdocs\3161Database files\recipe_recommender\app\csvfiles\updated_Categories.csv')
-#tester = addparseddoctocsv(data["Keywords_parsed"])
+#tester = addparsedddoctocsv(data["Keywords_parsed"])
+#print(tester)
+
+def allergy_checker(ingre):
+    #dictionary of alergies and the related foods fo the allergies 
+    common_allergens = {
+    'Milk Allergy': {'Cheese', 'Butter', 'Margarine', 'Yogurt', 'cream', 'Whey', 'cottage', 'Ghee', 'Half and Half', 'Chocolate', 'Milk'},
+    'Egg Allergy': {'egg'},
+    'Tree Nut Allergy': {'nut', 'Almond', 'Cashew', 'Macadamia', 'Pistachio','Pine','Walnut', 'Pistachio', 'Pecan', 'Hazelnut'},
+    'Peanurt Allergy': {'peanut', 'peanut butter'},
+    'ShellFish Allergy': {'Shrimp','Prawn','Crayfish', 'Lobster', 'Squid', 'Scallop', 'Clam', 'Crab', 'Oyster', 'Mussle' },
+    'Wheat': {'flour', 'wheat', 'pasta', 'noodle', 'bread', 'crust', 'Bulgur', 'Pasta', 'malt', 'starch', 'Soy' },
+    'Soy Allergy': {'soy', 'tofu', 'lecithin'},
+    'Fish Allergy': {'fish', 'seafood', 'Flounder', 'mackerel', 'swordfish', 'Alaskan salmon', 'Salmon', 'Cod', 'Herring', 'mahi', 'Perch', 'Sardine', 'Striped bass', 'Tuna'},
+    'Sesame Allergy':{'sesame', 'tahini'}
+    }
+    lemmatizer = WordNetLemmatizer()
+    
+    ingrepar =[]
+    #loops throught each ingredient
+    for i in ingre:
+        items = re.split(" |-", i)
+        # Get rid of words containing non alphabet letters
+        items = [word for word in items if word.isalpha()]
+        # Turn everything to lowercase
+        items = [word.lower() for word in items]
+        # remove accents
+        items = [unidecode.unidecode(word) for word in items]  
+        # Lemmatize words so we can compare words to measuring words
+        items = [lemmatizer.lemmatize(word) for word in items]
+        ingrepar= ingrepar +items
+
+    allergy =[]
+    #takes a ingredient and checks if it is a valid value in the dictionary and returnes the corresponding key
+    def get_key(val):
+        for key, value in common_allergens.items():
+            if val in [word.lower() for word in list(value)]:
+                return key
+        return False   
+     
+    for tl in ingrepar:
+        if get_key(tl) != False:
+            allergy.append(get_key(tl))
+    
+    return list(dict.fromkeys(allergy))
+
+#allergy_checker(['tomatoes', 'rice', 'cheese', 'parsley', 'sausage', 'paprika', 'salt', 'black pepper', 'Mahi-mahi', 'peanuts'])

@@ -1,16 +1,54 @@
 # Recipe recommender system
+BY 
+Sudhish Sepual
+Jamall Henry
+Nikaylia Gayle
 
 Code for recipe recommender system
+# To get the recipe dataset
 
-To begin using this app you can do the following:
+Go to this link and download the zip file and add the file 'csvfiles' to your 'app' file :
+    https://drive.google.com/file/d/1jrE_cbjARRYuf209-ExXeFx2GdMUUVzp/view?usp=share_link
+
+
+# Create database
+# make the database in postgress sql shell open the psql shell
+$ create user "reciperecom";
+$ create database "reciperecom";
+$ #\password reciperecom  #Password123
+$ alter database reciperecom owner to reciperecom;
+
+# setting up the new env
+copy the .env.sample and edit the folowinmg to be like what is below and also remane the file to .env
+
+FLASK_ENV=development
+FLASK_RUN_PORT=8080
+FLASK_RUN_HOST=0.0.0.0
+DATABASE_URL=postgresql://reciperecom:Password123@localhost/reciperecom
+SECRET_KEY= ak%jh%asd9#!ad8@*^asd%fa$ (or some secretkey you may want to add)
+
+# after adding data to the database you can view the data by opening the psql shell and running the following commands after logging in.
+$
+$ \c reciperecom #allows you to enter the specific database
+$ \ dt   # shows the tables in the database
+$ select * from "insert table name  here";  #to see the data uploaded to the database remove the ("") when typing in the specific table.
+
+# To begin using this app you can do the following:
 
 1. Clone the repository to your local machine.
-2. Create a Python virtual environment e.g. `python -m venv venv` (You may need to use `python3` instead)
+2. Create a Python virtual environment e.g. `vpython -m venv venv` (You may need to use `python3` instead)
 3. Enter the virtual environment using `source venv/bin/activate` (or `.\venv\Scripts\activate` on Windows)
 4. Install the dependencies using Pip. e.g. `pip install -r requirements.txt`. Note: Ensure you have PostgreSQL already installed and a database created.
 5. Edit the `app/__init__.py` file and enter your database credentials and database name.
 6. Run the migrations by typing `python manage.py db upgrade`
 7. Start the development server using `python run.py`.
+
+# If any issues with migrating your database tables use the following:
+
+$ flask db stamp head
+$ flask db migrate
+$ flask db upgrade
+
 
 ## Separate Config file
 
@@ -38,7 +76,7 @@ $env:SECRET_KEY="YourRandomSecretKey"
 $env:DATABASE_URL="postgresql://yourusername:yourpassword@localhost/databasename"
 ```
 
-And on Heroku:
+And on Heroku if needed to push to Heroku:
 
 ```bash
 heroku config:set SECRET_KEY="my-super-secret-key"

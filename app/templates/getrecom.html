@@ -1,0 +1,210 @@
+{% extends "base.html" %}
+
+{% block main %}
+  <div class="login-form center-block">
+    
+    <h2 align="center" >Recipe Recommender</h2>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.js"></script>
+    <script>
+      //paste this code under the head tag or in a separate js file.
+    // Wait for window load
+    $(window).load(function() {
+      // Animate loader off screen
+      $(".se-pre-con").fadeOut("slow");;
+    });
+    </script>
+
+    
+    <div class="se-pre-con">
+        <div class="loader-wrapper">
+          <div id="loader"></div>
+          <div style="display:none;" id="myDiv" class="animate-bottom"></div>
+        </div>  
+      </div>
+    <form action="{{ url_for('getrecommendation') }}" method="post">
+      {{ form.csrf_token }}
+      {% include 'flash_messages.html' %}
+      <div>
+        <div class="form-group">
+          <br>
+              <h6>Your current ingredients Select to add for recommendation</h6>
+          {% if useringre != [] %}
+          <div class = "ingrelist">
+            <ol>
+              {% for ingre in useringre %}
+                <li> <input type="checkbox" name = "ingredient" value= "{{ ingre }}"/>&nbsp; {{ ingre }} </li>
+              {% endfor %}
+            </ol>
+          </div>
+          
+          {% endif %}
+          <br>
+          {{ form.ingredients.label }}
+          {{ form.ingredients(class='form-control', placeholder="Enter any extra ingredients you may have that you would like to use") }}
+        </div>
+        <br>
+
+        <hr>
+          <br>
+          <h6>Categories</h6>
+          
+          <div class = Category>
+            <ol>
+              <li>
+                <div class="tipper">Preperation Type 
+                  <span class="tippertext"><div id="cols">
+                    <div class="categorielist">
+                      {{ form.preptype.label(class_="form-label") }}
+                      {{ form.preptype(class_="list-group") }}
+                    </div>
+                </div></span>
+                </div>
+              </li>
+
+              <li>
+                <div class="tipper">Time to Cook 
+                  <span class="tippertext"><div id="cols">
+                    <div class="categorielist">
+                      {{ form.time.label(class_="form-label") }}
+                      {{ form.time(class_="list-group") }}
+                    </div>
+                </div></span>
+                </div>
+              </li>
+
+              <li>
+                <div class="tipper">Difficulty 
+                  <span class="tippertext"><div id="cols">
+                    <div class="categorielist">
+                      {{ form.diff.label(class_="form-label") }}
+                      {{ form.diff(class_="list-group") }}
+                    </div>
+                </div></span>
+                </div>
+              </li>
+
+              <li>
+                <div class="tipper">Food Type 
+                  <span class="tippertext"><div id="cols">
+                    <div class="categorielist">
+                      {{ form.fotype.label(class_="form-label") }}
+                      {{ form.fotype(class_="list-group") }}
+                    </div>
+                </div></span>
+                </div>
+              </li>
+
+              <li>
+                <div class="tipper">Event Type 
+                  <span class="tippertext"><div id="cols">
+                    <div class="categorielist">
+                      {{ form.events.label(class_="form-label") }}
+                      {{ form.events(class_="list-group") }}
+                    </div>
+                </div></span>
+                </div>
+              </li>
+
+              <li>
+                <div class="tipper">Seasonal  
+                  <span class="tippertext"><div id="cols">
+                    <div class="categorielist">
+                      {{ form.seas.label(class_="form-label") }}
+                      {{ form.seas(class_="list-group") }}
+                    </div>
+                </div></span>
+                </div>
+              </li>
+
+              <li>
+                <div class="tipper">Misc 
+                  <span class="tippertext"><div id="cols">
+                    <div class="categorielist">
+                      {{ form.misc.label(class_="form-label") }}
+                      {{ form.misc(class_="list-group") }}
+                    </div>
+                </div></span>
+                </div>
+              </li>
+
+            </ol>
+            
+          </div>
+ 
+        </div>
+        
+              {% if selcat != [] %}
+              <h6>Selected categories</h6>
+              <div>
+              <ol>
+                {% for cat in selcat %}
+                  <li> {{ cat }} </li>
+                {% endfor %}
+              </ol>
+              {% endif %}
+            </div>
+        <hr>
+        <br>
+        <div class="form-group">
+              <h6>{{ form.num.label }}</h6>
+              <select name = "num" class="btn btn-primary dropdown-toggle" aria-label=".form-select-lg" required>
+                <option class="dropdown-item" value ="5" >5</option>
+                <option class="dropdown-item" value ="10" >10</option>
+                <option class="dropdown-item" value ="15" >15</option>
+                <option class="dropdown-item" value ="20" >20</option>
+                <option class="dropdown-item" value ="25" >25</option>
+                <option class="dropdown-item" value ="30" >30</option>
+                <option class="dropdown-item" value ="35" >35</option>
+                <option class="dropdown-item" value ="40" >40</option>
+              </select>
+        </div>
+            
+      </div>
+      
+
+      <br>
+      <button class = "button" type="submit" name="submit" class="btn btn-primary btn-block" onclick="this.classList.toggle('button--loading')"><span class="button__text">Get Recommendation</span></button>
+
+    </form>
+    
+    {% if prnames != [] %}
+    <br>
+    <hr>
+    <br>
+    <div>
+      <h6>Your list of Prev Recommendations</h6>
+          
+          <div class = "recommendlist">
+            <ol>
+              {% for prname in prnames %}
+                <li> <a href="/viewrecipe/{{ prname }}">{{ prname }}</a> </li>
+              {% endfor %}
+            </ol>
+          </div>
+          {% endif %}
+          {% if rnames != [] %}
+          <br>
+          <hr>
+          <br>
+          <div>
+            <h6>Your list of recommendations</h6>
+                
+                <div class = "recommendlist">
+                  <ol>
+                    {% for rname in rnames %}
+                      <li> <a href="/viewrecipe/{{ rname }}">{{ rname }}</a> </li>
+                    {% endfor %}
+                  </ol>
+                </div>
+                
+                
+          </div>
+          {% endif %}
+          
+
+  </div>
+
+
+
+{% endblock %}

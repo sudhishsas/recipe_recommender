@@ -2,6 +2,24 @@ from . import db
 from werkzeug.security import generate_password_hash
 from datetime import datetime
 
+class User_Profile(db.Model):
+
+    __tablename__ = 'user_profile'
+
+    id = db.Column(db.Integer, primary_key=True)
+    ingredients = db.Column(db.TEXT,nullable=True)
+    alergies = db.Column(db.TEXT,nullable=True)
+    fav_categories = db.Column(db.TEXT,nullable=True)
+    date_added = db.Column(db.DateTime, default = datetime.utcnow)
+
+
+    def __init__(self, id , ingredients, alergies, fav_categories, date_added):
+        self.id = id
+        self.ingredients = ingredients
+        self.alergies = alergies
+        self.fav_categories = fav_categories
+        self.date_added = date_added
+
 class UserLogin(db.Model):
     # You can use this to change the table name. The default convention is to use
     # the class name. In this case a class name of UserProfile would create a
@@ -18,10 +36,12 @@ class UserLogin(db.Model):
     password= db.Column(db.String(255))
 
 
-    def __init__(self, first_name, last_name, username, password):
+    def __init__(self, first_name, last_name, username, email, password, date):
         self.first_name = first_name
         self.last_name = last_name
         self.username = username
+        self.email = email
+        self.date = date
         self.password = generate_password_hash(password, method='pbkdf2:sha256')
 
 
@@ -43,26 +63,7 @@ class UserLogin(db.Model):
     def __repr__(self):
         return '<User %r>' % (self.username)
 
-class User_Profile(db.Model):
 
-    __tablename__ = 'members'
-
-    id = db.Column(db.Integer, primary_key=True)
-    f_name = db.Column(db.String(100),nullable=False)
-    l_name = db.Column(db.String(100),nullable=False)
-    email = db.Column(db.String(120),nullable=False)
-    ingredients = db.Column(db.TEXT,nullable=True)
-    alergies = db.Column(db.TEXT,nullable=True)
-    date_added = db.Column(db.DateTime, default = datetime.utcnow)
-
-
-    def __init__(self, position ,f_name,l_name, email,ingredients, address):
-        self.position = position
-        self.l_name = l_name
-        self.f_name = f_name
-        self.email = email
-        self.ingredients = ingredients
-        self.address = address
 
 
 
