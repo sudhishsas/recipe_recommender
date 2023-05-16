@@ -297,14 +297,6 @@ def sign_up():
             
     return render_template('sign_up.html', form=form)
 
-        
-@app.route('/about/')
-@login_required
-def about():
-    """Render the website's about page."""
-    return render_template('about.html')
-
-
 
 @app.route("/getrecommendation", methods =["GET","POST"])
 @login_required
@@ -479,11 +471,6 @@ def viewrecipes(recipeName):
     
     
     return redirect(url_for("login"))
-
-@app.route("/secure-page")
-@login_required
-def secure_page():
-    return render_template("secure_page.html")
 
 
 @app.route("/logout")
