@@ -349,6 +349,7 @@ def addparsedddoctocsv(rec, input=0):
 #print(tester)
 
 def allergy_checker(ingre):
+
     #dictionary of alergies and the related foods fo the allergies 
     common_allergens = {
     'Milk Allergy': {'Cheese', 'Butter', 'Margarine', 'Yogurt', 'cream', 'Whey', 'cottage', 'Ghee', 'Half and Half', 'Chocolate', 'Milk'},
@@ -375,7 +376,7 @@ def allergy_checker(ingre):
         items = [unidecode.unidecode(word) for word in items]  
         # Lemmatize words so we can compare words to measuring words
         items = [lemmatizer.lemmatize(word) for word in items]
-        ingrepar= ingrepar +items
+        ingrepar= ingrepar + items
 
     allergy =[]
     #takes a ingredient and checks if it is a valid value in the dictionary and returnes the corresponding key

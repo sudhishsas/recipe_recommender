@@ -112,10 +112,11 @@ def profile():
             ftype = request.form.getlist('fotype')
             event = request.form.getlist('events')
             sse = request.form.getlist('seas')
+            country = request.form.getlist('countries')
             msc = request.form.getlist('misc')
 
             #print("prept, time, dif, ftype, event, sse, msc",  prept, time, dif, ftype, event, sse, msc)
-            categor = prept+ time+ dif + ftype+ event+sse+msc
+            categor = prept+ time+ dif + ftype+ event+sse+msc+country
             categor = list(i.lstrip() for i in categor)
             
             if category == []:
@@ -329,7 +330,7 @@ def getrecommendation():
                 if corrector.correction(x) != "i":
                     if corrector.correction(x) == None:
                         #correcting a phrase like "A bunch of bananans"
-                        newingre.append(correct_spelling(x))
+                        newingre.append(str(correct_spelling(x)))
                     else:
                         newingre.append(corrector.correction(x))
             ingre = newingre.copy()
@@ -356,11 +357,12 @@ def getrecommendation():
             ftype = request.form.getlist('fotype')
             event = request.form.getlist('events')
             sse = request.form.getlist('seas')
+            country = request.form.getlist('countries')
             msc = request.form.getlist('misc')
 
             #print("prept, time, dif, ftype, event, sse, msc",  prept, time, dif, ftype, event, sse, msc)
             # adds all the categories to a single list
-            categor = prept+ time+ dif + ftype+ event+sse+msc
+            categor = prept+ time+ dif + ftype+ event+sse+msc+country
             categor = list(i.lstrip() for i in categor)
             
             print("caterory ", categor)
