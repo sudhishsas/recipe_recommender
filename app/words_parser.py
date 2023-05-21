@@ -16,9 +16,6 @@ from collections import Counter
 
 
 
-# lemmatizer = WordNetLemmatizer()
-# measures = [lemmatizer.lemmatize(m) for m in measures]
-# words_to_remove = [lemmatizer.lemmatize(m) for m in words_to_remove]
 #data = pd.read_csv(r'C:\xampp\htdocs\3161Database files\recipe_recommender\app\csvfiles\updated_Categories.csv')
 
 def ingredient_parser(ingreds):
@@ -138,16 +135,6 @@ def culture_parser(keywords):
             culture_words.append(" ".join(items))
     return culture_words
 
-category_no_words = ['caribbean','scandinavian', 'residents', 'madagascans', 'da', 'denmark', 'hawaiian', 'venezuelans', 'bruneian', 'slovenia', 'canada', 'bahrainis', 'caicos', 'native', 'territory', 'curacaoans', 'jordan', 'ethiopian', 'timor', 'nevisian', 'madagascan', 'algerian', 'vaticanian', 'surinamese', 'nigeriens', 'ivorian', 'aruba', 'réunionese', 'toméans', 'virgin', 'mayen', 'congo', 'guadeloupeans', 'kosovan', 'barbudan', 'australian', 'miquelon', 'ireland', 'chile', 'philippines', 'micronesian', 'france', 'marianans', 'israeliisraelite', 'american', 'congolese', 'venezuelan', 'senegal', 'habesha', 'latvia', 'eritrean', 'czech', 'guatemala', 'helenian', 'poles', 'norfolk', 'ukrainians', 'miquelonnaises', 'madagascar', 'burundi', 'estonian', 'z', 'zealand', 'rwanda', 'vincentian', 'qataris', 'emiri', 'futunawallisian', 'somali', 'arabians', 'puerto', 'kazakh', 'pakistani', 'tanzania', 'jamaicans', 'greeks', 'senegalese', 'sahrawisahrawiansahraouian', 'koreanssouth', 'comorians', 'qatar', 'panamanian', 'banyarwanda', 'danes', 'magyar', 'wallis', 'ugandan', 'helenians', 'indonesian', 'british', 'wallisians', 'anguilla', 'luxembourg', 'mayotte', 'portuguese', 'belize', 'cypriots', 'liechtenstein', 'koreansnorth', 'ukraine', 'jan', 'estonia', 'equatoguineans', 'turkmens', 'lankans', 'rico', 'bissau-guinean', 'liechtensteiner', 'omanis', 'pierre', 'sudanese', 'monaco', 'cayman', 'timorese', 'liberians', 'macedonians', 'tanzanians', 'venezuela', 'thai', 'eustatius', 'iraqis', 'mongoliansmongols', 'union', 'tomé', 'afghan', 'bermudian', 'sandwich', 'kyrgyzstan', 'koreans', 'herzegovinians', 'new', 'ecuadorians', 'somaliland', 'mauritius', 'nauru', 'saudi', 'colombian', 'cook', 'grenada', 
-                        'persian', 'guatemalan', 'nepali', 'cambodians', 'malawian', 'saban', 'tongans', 'england', 'kyrgyzstanis', 'irishmen', 'guineans', 'malaysian', 'benin', 'andorran', 'kazakhstani', 'tonga', 'tunisian', 'tokelau', 'hungarian', 'turkmenistan', 'slovenian', 'haiti', 'jamaica', 'kazakhstan', 'falkland', 'kosovars', 'arubans', 'portugal', 'vietnamese', 'sierra', 'turkey', 'seychelloises', 'samoa', 'bahrain', 'vincentians', 'belgian', 'sweden', 'sahraouis', '&',
-                        'gambian', 'konger', 'futunan', 'malawi', 'ghanaian', 'thailand', 'emiratis', 'cocos', 'kittitian', 'jordanian', 'nevisians', 'swedes', 'french', 'irishnorthern', 'formosan', 'islanderssouth', 'rica', 'armenia', 'kazakhs', 'britons', 'tokelauans', 'martin', 'guernseywomen', 'namibia', 'ossetia', 'comoros', 'ethiopians', 'gibraltar', 'timor-leste', 'ricans', 'india', 'marino', 'china', 'cambodia', 'somalilanders', 'angolans', 'cameroonian', 'czechs', 'kirgizkirghiz', 'antigua', 'iceland', 'maldives', 'antarctica', 'bahamians', 'montenegrins', 'samoans', 'djibouti', 'great', 'uzbekistanis', 'lithuanians', 'laolaotian', 'honduran', 'southern', 'barbadians', 'guam', 'martinican', 'são', 'burkina', 'city', 'ramadan', 'fiji', 'hungary', 'tongan', 'kittitians', 'gabonaise', 'philippine', 'papua', 'cantonesehong', 'belizeans', 'curacaoan', 'democratic', 'of', 'bruneians', 'finnish', 'namibians', 'icelandic', 'qatari', 'polynesians', 'mahorans', 'serbsserbians', 'guamanian', 'alanders', 'trinidadians', 'libyan', 'turks', 'luxembourgish', 'saudisaudi', 'guiana', 'swiss', 'angola', 'fijians', 'cuban', 'bosnia', 'brunei', 'cambodian', 'niger', 'guinean', 'tajikistanis', 'biot', 'paraguay', 'futunans', 'anguillan', 'egyptians', 'lithuanian', 'zealanders', 'verde', 'eustatiusstatian', 'bermudans', 'chilean', 'sahara', 'croatia', 'belizean', 'europeans', 'nicaraguan', 'malian', 'réunion', 'bermudan', 'guyana', 'kuwait', 'albanians', 'moldovans', 'colombia', 'gabon', 'barbudans', 'republic', 'norwegian', 'slovak', 'togolese', 'equatorial', 'spanish', 'yemenis', 'italians', 'scots', 'bonairean', 'beninois', 'lanka', 'brazilian', 'azerbaijan', 'barthélemois', 'suriname', 'frenchmen', 'bangladesh', 'mauritanians', 'eritreans', 'africans', 'curacao', 'islandsouth', 'taiwanese', 'hong', 'saint-pierrais', 'surinamers', 'dominican', 'cabo', 'chadians', 'japanese', 'caymanians', 'filipinas', 'ivory', 'lankan', 'greek', 'tobago', 'kitts', 'uruguayans', 'algeria', 'emirian', 'leone', 'mozambican', 'romania', 'nigerians', 'formosans', 'ocean', 'azerbaijani', 'saharan', 'malaysians', 'martiniquaises', 'guadeloupe', 'welshwomen', 'liechtensteiners', 'antarcticans', 'saint-pierraissaint-pierraises', 'canadian', 'burmese', 'nauruans', 'bhutanese', 'comorian', 'gambians', 'sammarinesemsão', 'brazil', 'mexican', 'argentina', 'uzbeks', 'gambia', 'armenian', 'niuean', 'kiribati', 'tokelauan', 'jersey', 'kuwaitis', 'vatican', 'verdean', 'liberia', 'monégasquesmonacans', 'myanmar', 'iranian', 'egypt', 'nigerien', 'niue', 'saint-martinoise', 'ivorians', 'bulgarians', 'mcdonald', 'gibraltarians', 'tuvaluan', 'ecuadorean', 'islanders', 'saudissaudi', 'slovakians', 'moroccan', 'pakistan', 'mozambique', 'guadeloupians', 'kenya', 'burundian', 'algerians', 'vaticanians', 'ghana', 'saint', 'hellenes', 'barthélemoises', 'equatoguinean', 'cunha', 'singapore', 'belarusians', 'malians', 'austrian', 'slovenians', 'swaziswati', 'luxembourgers', 'monégasque', 'icelanders', 'arabia', 'syrian', 'americans', 'palestinians', 'colombians', 'ecuador', 'omani', 'paraguayan', 'dutchmen', 'hongkongers', 'caledonian', 'latvian', 'mongolian', 'pakistanis', 'palau', 'lesotho', 'somalian', 'barbadian', 'austria', 'greenlanders', 'turkish', 'nicaragua', 'tunisia', 'trinidadiantobagonian', 'indians', 'seychelles', 'irishwomen', 'kenyans', 'bahamas', 'beninese', 'spain', 'ossetian', 'panamanians', 'seychellois', 'latviansletts', 'niueans', 'solomon', 'zanzibar', 'african', 'northern', 'belarus', 'southeast', 'tobagonians', 'bonaire', 'mexico', 'barbuda', 'tunisians', 'frenchwomen', 'uzbekistani', 'salvadoran', 'nevis', 'iran', 'malawians', 'rwandans', 'ukrainian', 'salvadorans', 'palestine', 'united', 'tuvaluans', 'afghanistan', 'tajiks', 'bulgarian', 'bolivians', 'polynesia', 'iraqi', 'turkmen', 'ascension', 'uk', 'arab', 'greece', 'zambia', 'guinea-bissau', 'kosovo', 'cameroonians', 'nicaraguans', 'maarten', 'dutch', 'antarctic', 'abkhazians', 'guianese', 'macedonian', 'swedish', 'futuna', 'abkhazia', 'albanian', 'guernsey', 'american', 'mexicans', 'somalia', 'martiniquais', 'azerbaijanis', 'guatemalans', 'somalis', 'príncipe', 'belgium', 'slovaks', 'jamaican', 'mauritanian', 'dutchwomen', 'emirians', 'bolivian', 'english', 'switzerland', 'bermuda', 'botswana', 'faroese', 'kingdom', 'ghanaians', 'bulgaria', 'statians', 'papuan', 'central', 'bolivia', 'abkhazabkhazian', 'mauritania', 'réunionnaises', 'korea', 'honduras', 'norway', 'austrians', 'burkinabe', 'argentines', 'ugandans', 'zambian', 'haitian', 'anguillans', 'magyars', 'helena,', 'montenegrin', 'persians', 'chileans', 'grenadines', 'costa', 'scotsmen', 'estonians', 'irish', 'barundi', 'irishirishmen', 'salvadoreans', 'fijian', 'antiguans', 'libya', 'marianan', 'southwest', 'ni-vanuatu', 'maldivians', 'macedonia', 'panama', 'kenyan', 'filipino', 'kuwaiti', 'east', 'wales', 'netherlands', 'hungarians', 'ethiopia', 'man', 'rwandan', 'montserratian', 'faso', 'lithuania', 'paraguayans', 'scotland', 'kyrgyz', 'greekhellenic', 'chadian', 'albania', 'lucia', 'finland', 'vanuatu', 'grenadian', 'zanzibaris', 'aruban', 'tristan', 'nepalisnepalese', 'guernseymen', 'somalilander', 'libyans', 'zanzibari', 'comorans', 'indonesians', 'kirghiz', 'emirati', 'asia', 'argentinians', 'azeri', 'jordanians', 'european', 'statesu.s.', 'the', 'sint', 'israel', 'kyrgyzstani', 'sudan', 'greenland', 'indonesia', 'malaysia', 'oman', 'rican', 'saint-martinoissaint-martinoises', 'togo', 'slovene', 'sri', 'poland', 'malta', 'singaporeans', 'martinique', 'mongolia', 'réunionnais', 'samoan', 'cubans', 'salvadorians', 'isle', 'japan', 'saba', 'liberian', 'djiboutians', 'mozambicans', 'grenadians', 'israelis', 'filipinos', 'montserratians', 'australians', 'barthélemy', 'serbia', 'tajikistani', 'russians', 'gabonese', 'monacan', 'tajikistan', 'mauritian', 'america', 'palauans', 'arabian', 'uzbekistan', 'lebanese', 'nigerian', 'nepalese', 'germans', 'bosnian', 
-                        'croatian', 'pitcairn', 'djiboutian', 'angolan', 'tanzanian', 'burkinabé', 'welsh', 'states', 'armenians', 'tuvalu', 'papuans', 'sahrawis', 'eswatini', 'south', 'lebanon', 'scotswomen', 'leoneans', 'africa', 'cyprus', 'serbian', 'georgian', 'italy', 'argentinian', 'verdeans', 'polynesian', 'indian', 'caledonians', 'batswana', 'slovakia', 'andorrans', 'kosovar', 'finns', 'samoansandorra', 'bangladeshi', 'iraq', 'zimbabwean', 'the', 'territories', 'spaniards', 'georgia', 'haitians', 'polish', 'moroccans', 'salvador', 'coast', 'moldova', 'western', 'svalbard', 'jersianjèrriais', 'syria', 'afghans', 'macau', 'chinese', 'peruvian', 'toméan', 'asian', 'u.s.', 'eritrea', 'maltese', 
-                        'sahrawiwestern', 'montserrat', 'bahamian', 'germany', 'heard', 'nauruan', 'welshmen', 'yemen', 'palestinian', 'el', 'netherlanders', 'romanians', 'croatianscroats', 'caymanian', 'vincent', 'korean', 'myanma', 'sahrawian', 'italian', 'georgians', 'micronesia', 'cuba', 'bangladeshis', 'laoslaotians', 'slovenes', 'cameroon', 'namibian', 'kongese', 'russia', 'bermudians', 'mariana', 'bouvet', 'kyrgyzkirgiz', 'singaporean', 'lettish', 'romanian', 'yemeni', 'malagasy', 'island', 'russian', 'britain', 'palauan', 'comoran', 'kong', 'mahoran', 'jerseymen', 'taiwan', 'manx', 'i-kiribati', 'basotho', 'macanese', 'syrians', 'herzegovina', 'hondurans', 'caledonia', 'scottish', 'zimbabwe', 'nepal', 'uganda', 'leonean', 'bahraini', 'uruguayan', 'marshallese', 'bosnians', 'morocco', 'jerseywomen', 'vanuatuan', 'guamanians', 'uruguay', 'vietnam', 'faroe', 'dominicans', 'sammarinese', 'guinea', 'argentine', 'barbados', 'laos', 'dominica', 'antiguan', 'chad', 'peruvians', 'nigeria', 'aland', 'belgians', 'moldovan', 
-                        'norwegians', 'australia', 'sahrawi', 'mauritians', 'micronesians', 'lucian', 'cypriot', 'motswana', 'maarteners', 'kazakhstanis', 'canadians', 'north', 'emirates', 'uzbek', 'marshall', 'islands', 'lucians', 'ossetians', 'ecuadorian', 'herzegovinian', 'southwestern', 'saharans', 'swazis', 'trinidad', 'azeris', 'san', 'malinese', 'peru', 'belarusian', 'german', 'montenegro', 'zimbabweans', 'danish', 'maldivian', 'miquelonnais', 'brazilians', 'cajun', 'egyptian', 'zambians', 'mali', 'bhutan', 'iranians', 'guyanese', 'bissau-guineans', 'burundians']
-#lemmatizer = WordNetLemmatizer()
-#measures = [lemmatizer.lemmatize(m) for m in category_no_words]
-#print(measures)
-# words_to_remove = [lemmatizer.lemmatize(m) for m in words_to_remove]
 
 def category_parser(category):
 
@@ -203,11 +190,6 @@ def category_parser(category):
             category_words = [word for word in category_words if word not in other_stop_words]
     return category_words
 
-#print(' < 60 min'.strip())
-#test = data.Keywords_parsed.apply(category_parser)
-#for i in test:
-#    print(i)
-
 #data = pd.read_csv(r'C:\xampp\htdocs\3161Database files\recipe_recommender\app\csvfiles\updated_Categories.csv')
 #tester = data.Keywords_parsed.apply(category_parser)
 #recipe_df = pd.read_csv(r'C:\xampp\htdocs\3161Database files\recipe_recommender\app\csvfiles\updated_Categories.csv')
@@ -258,41 +240,6 @@ def category_fixer(keywords):
 #test = data.RecipeCategory.values
 #tr = data['RecipeCategory']
 #tester = category_fixer(tr)
-
-#recipe_df = pd.read_csv(r'C:\xampp\htdocs\3161Database files\recipe_recommender\app\parsed_recipesv4.csv')
-#recipe_df["Keywords_parsed"] = tester
-#df = recipe_df[["RecipeId","Name","CookTime","RecipeCategory","Keywords","RecipeIngredientParts","Calories","FatContent","CholesterolContent","SodiumContent","SugarContent","ProteinContent","RecipeInstructions","Keywords_parsed"]]
-#df = recipe_df.dropna()
-
-#df.to_csv(r'updated_Categories', index=False)
-
-
-#if __name__ == "__main__":
-#    recipe_df = pd.read_csv(r'app\csvfiles\parsed_recipesv4.csv')
-#    recipe_df["ingredients_parsed"] = recipe_df["RecipeIngredientParts"].apply(
-#        lambda x: ingredient_parser(x)
-#    )
-#    df = recipe_df[["RecipeId","Name","CookTime","RecipeCategory","Keywords","RecipeIngredientParts","Calories","FatContent","CholesterolContent","SodiumContent","SugarContent","ProteinContent","RecipeInstructions","ingredients_parsed"]]
-#    df = recipe_df.dropna()
-
-    # remove - Allrecipes.com from end of every recipe title
-    #m = df.recipe_name.str.endswith("Recipe - Allrecipes.com")
-    #df["recipe_name"].loc[m] = df.recipe_name.loc[m].str[:-23]
-#    df.to_csv(r'C:\xampp\htdocs\3161Database files\recipe_recommender\app\csvfiles', index=False)
-
-    # vocabulary = nltk.FreqDist()
-    # for ingredients in recipe_df['ingredients']:
-    #     ingredients = ingredients.split()
-    #     vocabulary.update(ingredients)
-
-    # for word, frequency in vocabulary.most_common(200):
-    #     print(f'{word};{frequency}')
-    # fdist = nltk.FreqDist(ingredients)
-
-    # common_words = []
-    # for word, _ in vocabulary.most_common(250):
-    #     common_words.append(word)
-    # print(common_words)
 
 
 def addparsedddoctocsv(rec, input=0):
